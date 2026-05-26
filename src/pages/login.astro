@@ -4,10 +4,13 @@ import '../styles/global.css';
 
 let logoUrl = "/favicon.svg"; 
 try {
+  // El servidor de Vercel lee directo de la IP en la construcción
   const logoResponse = await fetch('http://51.21.220.203/api/Logo?populate=*');
   const logoJson = await logoResponse.json();
   const logoPath = logoJson.data?.logo?.url || logoJson.data?.logo?.[0]?.url;
-  if (logoPath) logoUrl = `http://51.21.220.203${logoPath}`;
+  
+  // AQUÍ EL CAMBIO PARA EL NAVEGADOR: Usamos el túnel seguro
+  if (logoPath) logoUrl = `/aws${logoPath}`;
 } catch (error) {
   console.error("Error conectando con Strapi:", error);
 }
@@ -84,8 +87,8 @@ try {
     const password = document.getElementById('password').value;
 
     try {
-      // Llamamos a la API de login de Strapi
-      const response = await fetch('http://51.21.220.203/api/auth/local', {
+      // Llamamos a la API a través de nuestro proxy seguro
+      const response = await fetch('/aws/api/auth/local', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,22 +99,31 @@ try {
         }),
       });
 
+      // Blindaje de errores igual que en el registro
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("El servidor respondió con error:", errorText);
+        
+        try {
+          const errorJson = JSON.parse(errorText);
+          alert('Error al iniciar sesión: ' + (errorJson.error?.message || 'Credenciales inválidas.'));
+        } catch (e) {
+          alert('Error crítico de red. Revisa la consola F12.');
+        }
+        return;
+      }
+
       const data = await response.json();
 
-      if (response.ok) {
-        // ¡Éxito! Guardamos el token y los datos del usuario
-        localStorage.setItem('folio_token', data.jwt);
-        localStorage.setItem('folio_user', JSON.stringify(data.user));
-        
-        window.location.href = '/'; // Redirigimos al catálogo
-      } else {
-        // Si hay error (ej: contraseña incorrecta)
-        console.error("Error de Strapi:", data);
-        alert('Error al iniciar sesión: ' + (data.error?.message || 'Credenciales inválidas.'));
-      }
+      // ¡Éxito! Guardamos el token y los datos del usuario
+      localStorage.setItem('folio_token', data.jwt);
+      localStorage.setItem('folio_user', JSON.stringify(data.user));
+      
+      window.location.href = '/'; 
+      
     } catch (error) {
       console.error("Error de conexión:", error);
-      alert('Error de conexión con el servidor.');
+      alert('Error de conexión con el servidor. Mira la consola para más detalles.');
     } finally {
       submitBtn.innerHTML = originalText;
       submitBtn.disabled = false;

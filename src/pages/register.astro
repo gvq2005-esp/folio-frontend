@@ -4,10 +4,13 @@ import '../styles/global.css';
 
 let logoUrl = "/favicon.svg"; 
 try {
+  // El servidor de Vercel lee directo de la IP (esto está bien)
   const logoResponse = await fetch('http://51.21.220.203/api/Logo?populate=*');
   const logoJson = await logoResponse.json();
   const logoPath = logoJson.data?.logo?.url || logoJson.data?.logo?.[0]?.url;
-  if (logoPath) logoUrl = `http://51.21.220.203${logoPath}`;
+  
+  // AQUÍ ESTABA EL FALLO: Para el navegador, usamos el túnel seguro
+  if (logoPath) logoUrl = `/aws${logoPath}`;
 } catch (error) {
   console.error("Error conectando con Strapi:", error);
 }
@@ -77,20 +80,17 @@ try {
   registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // Cambiamos el botón para que parezca que está cargando
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = 'Creando cuenta...';
     submitBtn.disabled = true;
     submitBtn.classList.add('opacity-70');
 
-    // Recogemos los valores de los inputs
     const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     try {
-      // Llamamos a la API de registro de Strapi
-      const response = await fetch('http://51.21.220.203/api/auth/local/register', {
+      const response = await fetch('/aws/api/auth/local/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -102,25 +102,33 @@ try {
         }),
       });
 
+      // Blindaje extra para que no se rompa si Vercel devuelve un error 500 en HTML
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("El servidor respondió con error:", errorText);
+        
+        // Intentamos extraer el JSON de Strapi si existe
+        try {
+          const errorJson = JSON.parse(errorText);
+          alert('Error al crear la cuenta: ' + (errorJson.error?.message || 'Revisa los datos.'));
+        } catch (e) {
+          alert('Error crítico de red. Revisa la consola F12.');
+        }
+        return;
+      }
+
       const data = await response.json();
 
-      if (response.ok) {
-        // ¡Éxito! Guardamos el token y los datos del usuario en el navegador
-        localStorage.setItem('folio_token', data.jwt);
-        localStorage.setItem('folio_user', JSON.stringify(data.user));
-        
-        alert('¡Cuenta creada con éxito! Bienvenido a Folio.');
-        window.location.href = '/'; // Redirigimos al catálogo
-      } else {
-        // Si hay error (ej: email ya existe, contraseña corta...)
-        console.error("Error de Strapi:", data);
-        alert('Error al crear la cuenta: ' + (data.error?.message || 'Revisa los datos.'));
-      }
+      localStorage.setItem('folio_token', data.jwt);
+      localStorage.setItem('folio_user', JSON.stringify(data.user));
+      
+      alert('¡Cuenta creada con éxito! Bienvenido a Folio.');
+      window.location.href = '/';
+      
     } catch (error) {
       console.error("Error de conexión:", error);
-      alert('Error de conexión con el servidor.');
+      alert('Error de conexión con el servidor. Mira la consola para más detalles.');
     } finally {
-      // Restauramos el botón
       submitBtn.innerHTML = originalText;
       submitBtn.disabled = false;
       submitBtn.classList.remove('opacity-70');
