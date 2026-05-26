@@ -7,7 +7,8 @@ try {
   const logoResponse = await fetch('http://51.21.220.203/api/Logo?populate=*');
   const logoJson = await logoResponse.json();
   const logoPath = logoJson.data?.logo?.url || logoJson.data?.logo?.[0]?.url;
-  if (logoPath) logoUrl = `http://aws${logoPath}`;
+  // CORREGIDO: Ruta relativa para el proxy
+  if (logoPath) logoUrl = `/aws${logoPath}`;
 } catch (error) {
   console.error("Error conectando con Strapi:", error);
 }
@@ -168,8 +169,7 @@ try {
           </div>
 
           <div class="pt-4">
-            <button type="submit" id="submitBtn" class="w-full bg-orange-500 text-white py-4 rounded-full font-bold text-lg hover:bg-orange-600 transition shadow-md active:scale-95 flex justify-center items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+            <button type="submit" id="submitBtn" class="ESTILOS_ANTERIORES_AQUI">
               Publicar Historia
             </button>
           </div>
@@ -283,10 +283,11 @@ try {
       if (portada && portada.size > 0) {
         const coverForm = new FormData();
         coverForm.append('files', portada);
-        const resCover = await fetch('http://aws/api/upload', {
+        // CORREGIDO: Ruta relativa
+        const resCover = await fetch('/aws/api/upload', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${token}` // Firmamos el archivo con nuestro token
+            'Authorization': `Bearer ${token}` 
           },
           body: coverForm
         });
@@ -300,10 +301,11 @@ try {
       if (archivoPDF && archivoPDF.size > 0) {
         const pdfForm = new FormData();
         pdfForm.append('files', archivoPDF);
-        const resPdf = await fetch('http://aws/api/upload', {
+        // CORREGIDO: Ruta relativa
+        const resPdf = await fetch('/aws/api/upload', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${token}` // Firmamos el PDF
+            'Authorization': `Bearer ${token}` 
           },
           body: pdfForm
         });
@@ -323,11 +325,12 @@ try {
       if (portadaId) dataTextos.Portada = portadaId;
       if (pdfId) dataTextos.PDF = pdfId; 
 
-      const response = await fetch('http://aws/api/historias', {
+      // CORREGIDO: Ruta relativa
+      const response = await fetch('/aws/api/historias', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Firmamos la historia
+          'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify({ data: dataTextos }),
       });

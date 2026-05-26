@@ -318,7 +318,7 @@ try {
                                         const portadaUrl = portadaRelativa ? `/aws${portadaRelativa}` : '/placeholder-cover.jpg';
                                         
                                         const generoRaw = historia.attributes?.genero || historia.attributes?.Genero || historia.genero || historia.Genero;
-const generoNombre = generoRaw?.data?.attributes?.Nombre || generoRaw?.Nombre || "Sin género";
+                                        const generoNombre = generoRaw?.data?.attributes?.Nombre || generoRaw?.Nombre || "Sin género";
                                         
                                         const pdfRelativa = historia.PDF?.url || historia.attributes?.PDF?.data?.attributes?.url;
                                         const pdfUrl = pdfRelativa ? `/aws${pdfRelativa}` : '#';
