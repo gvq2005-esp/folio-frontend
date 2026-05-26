@@ -15,7 +15,7 @@ try {
   
   const logoPath = logoJson.data?.logo?.url || logoJson.data?.logo?.[0]?.url;
   if (logoPath) {
-    logoUrl = `http:/aws${logoPath}`;
+    logoUrl = `/aws${logoPath}`;
   }
 
   // --- PETICIÓN DE LAS HISTORIAS ---
@@ -315,13 +315,13 @@ try {
                                         const rating = historia.attributes?.Rating || historia.Rating || "0.0";
                                         
                                         const portadaRelativa = historia.Portada?.url || historia.attributes?.Portada?.data?.attributes?.url;
-                                        const portadaUrl = portadaRelativa ? `http://aws${portadaRelativa}` : '/placeholder-cover.jpg';
+                                        const portadaUrl = portadaRelativa ? `/aws${portadaRelativa}` : '/placeholder-cover.jpg';
                                         
                                         const generoRaw = historia.attributes?.genero || historia.attributes?.Genero || historia.genero || historia.Genero;
 const generoNombre = generoRaw?.data?.attributes?.Nombre || generoRaw?.Nombre || "Sin género";
                                         
                                         const pdfRelativa = historia.PDF?.url || historia.attributes?.PDF?.data?.attributes?.url;
-                                        const pdfUrl = pdfRelativa ? `http://aws${pdfRelativa}` : '#';
+                                        const pdfUrl = pdfRelativa ? `/aws${pdfRelativa}` : '#';
 
                                         return (
                                             <article 
