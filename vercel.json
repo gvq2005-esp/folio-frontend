@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/aws/:match*",
+      "destination": "http://51.21.220.203/:match*"
+    }
+  ]
+}
