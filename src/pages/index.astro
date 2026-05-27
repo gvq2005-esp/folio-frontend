@@ -940,13 +940,17 @@ try {
                 chatMessages.innerHTML = ''; // Limpiamos el cargando
 
                 if (json.data && json.data.length > 0) {
-                    const currentUser = isLogged ? JSON.parse(userString).username : null;
-                    
-                    json.data.forEach(msg => {
-                        const esMio = msg.attributes.NombreUsuario === currentUser;
-                        chatMessages.innerHTML += pintarMensaje(msg.attributes.NombreUsuario, msg.attributes.Texto, esMio);
-                    });
-                } else {
+    const currentUser = isLogged ? JSON.parse(userString).username : null;
+    
+    json.data.forEach(msg => {
+        // Hacemos una extracción segura por si Strapi envía los datos directos o anidados
+        const nombreAutor = msg.attributes?.NombreUsuario || msg.NombreUsuario || "Usuario";
+        const textoComentario = msg.attributes?.Texto || msg.Texto || "";
+        
+        const esMio = nombreAutor === currentUser;
+        chatMessages.innerHTML += pintarMensaje(nombreAutor, textoComentario, esMio);
+    });
+} else {
                     chatMessages.innerHTML = '<p class="text-xs text-center text-gray-400 py-4">No hay comentarios aún. ¡Sé el primero!</p>';
                 }
                 chatMessages.scrollTop = chatMessages.scrollHeight; // Autoscroll al fondo
