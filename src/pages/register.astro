@@ -119,8 +119,8 @@ try {
 
       const data = await response.json();
 
-      localStorage.setItem('folio_token', data.jwt);
-      localStorage.setItem('folio_user', JSON.stringify(data.user));
+      sessionStorage.setItem('folio_token', data.jwt);
+      sessionStorage.setItem('folio_user', JSON.stringify(data.user));
       
       alert('¡Cuenta creada con éxito! Bienvenido a Folio.');
       window.location.href = '/';

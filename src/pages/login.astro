@@ -116,8 +116,8 @@ try {
       const data = await response.json();
 
       // ¡Éxito! Guardamos el token y los datos del usuario
-      localStorage.setItem('folio_token', data.jwt);
-      localStorage.setItem('folio_user', JSON.stringify(data.user));
+      sessionStorage.setItem('folio_token', data.jwt);
+      sessionStorage.setItem('folio_user', JSON.stringify(data.user));
       
       window.location.href = '/'; 
       

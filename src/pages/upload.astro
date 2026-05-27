@@ -186,8 +186,8 @@ try {
 
 <script>
   // --- 1. PROTECCIÓN DE RUTA Y AUTENTICACIÓN ---
-  const token = localStorage.getItem('folio_token');
-  const userString = localStorage.getItem('folio_user');
+  const token = sessionStorage.getItem('folio_token');
+  const userString = sessionStorage.getItem('folio_user');
 
   // Si no hay token, redirigir al login y detener ejecución
   if (!token || !userString) {
@@ -207,8 +207,8 @@ try {
     document.getElementById('mainContent').classList.remove('opacity-0');
 
     document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('folio_token');
-      localStorage.removeItem('folio_user');
+      sessionStorage.removeItem('folio_token');
+      sessionStorage.removeItem('folio_user');
       window.location.href = '/'; 
     });
   }
