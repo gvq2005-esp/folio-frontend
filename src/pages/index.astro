@@ -935,7 +935,7 @@ try {
             
             try {
                 // Pedimos los comentarios filtrados por el ID de la historia actual
-                const res = await fetch(`/aws/api/comentarios?filters[historia][id][$eq]=${currentHistoriaId}&sort=createdAt:asc`);
+                const res = await fetch(`http://51.21.220.203/api/comentarios?filters[historia][id][$eq]=${currentHistoriaId}&sort=createdAt:asc`);
                 const json = await res.json();
                 
                 chatMessages.innerHTML = ''; // Limpiamos el cargando
@@ -1074,7 +1074,7 @@ try {
             botonEnvio.classList.add('opacity-50');
 
             try {
-                const res = await fetch('/aws/api/comentarios', {
+                const res = await fetch('http://51.21.220.203/api/comentarios', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
