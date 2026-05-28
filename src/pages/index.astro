@@ -5,7 +5,7 @@ import "../styles/global.css";
 // 1. Declaramos el logo por defecto
 let logoUrl = "/favicon.svg";
 
-// 2. AQUI ESTÁ LA CLAVE: Declaramos la variable historias como un array vacío
+// 2. Declaramos la variable historias como un array vacío
 let historias = [];
 
 try {
@@ -350,42 +350,6 @@ try {
                                         }
                                     </div>
                                 </div>
-
-                                <div class="mb-8">
-                                    <div
-                                        class="flex justify-between items-center mb-3"
-                                    >
-                                        <h4
-                                            class="text-xs font-bold text-gray-400 uppercase tracking-wider"
-                                        >
-                                            Nota mínima
-                                        </h4>
-                                        <span
-                                            id="ratingDisplay"
-                                            class="text-orange-500 font-extrabold text-sm bg-orange-50 px-2 py-0.5 rounded-md border border-orange-100"
-                                        >
-                                            Todas
-                                        </span>
-                                    </div>
-                                    <div class="relative pt-1">
-                                        <input
-                                            type="range"
-                                            id="ratingFilter"
-                                            min="0"
-                                            max="5"
-                                            step="0.5"
-                                            value="0"
-                                            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500 hover:accent-orange-600 transition-all"
-                                        />
-                                        <div
-                                            class="flex justify-between text-[10px] text-gray-400 mt-2 font-bold px-1"
-                                        >
-                                            <span>0</span>
-                                            <span>2.5</span>
-                                            <span>5.0</span>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </aside>
 
@@ -415,10 +379,6 @@ try {
                                                 historia.attributes?.Sinopsis ||
                                                 historia.Sinopsis ||
                                                 "No hay sinopsis disponible.";
-                                            const rating =
-                                                historia.attributes?.Rating ||
-                                                historia.Rating ||
-                                                "0.0";
 
                                             const portadaRelativa =
                                                 historia.Portada?.url ||
@@ -457,7 +417,6 @@ try {
                                                     data-portada={portadaUrl}
                                                     data-pdf={pdfUrl}
                                                     data-genero={generoNombre}
-                                                    data-rating={rating}
                                                 >
                                                     <div class="relative bg-gray-200 aspect-[3/4] w-full overflow-hidden">
                                                         <img
@@ -495,15 +454,7 @@ try {
                                                             {sinopsis}
                                                         </p>
 
-                                                        <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                                                            <div class="flex items-center gap-1.5 text-xs">
-                                                                <span class="text-orange-400">
-                                                                    ★★★★★
-                                                                </span>
-                                                                <span class="font-bold text-gray-700">
-                                                                    {rating}
-                                                                </span>
-                                                            </div>
+                                                        <div class="flex items-center justify-end mt-auto pt-4 border-t border-gray-100">
                                                             <a
                                                                 class="text-orange-500 text-xs font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform z-10 hover:text-orange-700"
                                                             >
@@ -611,13 +562,6 @@ try {
                                     class="text-sm font-medium text-gray-500 mb-3"
                                 >
                                 </p>
-
-                                <div class="flex items-center gap-1.5 text-sm">
-                                    <span class="text-orange-400">★★★★★</span>
-                                    <span
-                                        id="modalRating"
-                                        class="font-bold text-gray-700"></span>
-                                </div>
                             </div>
                         </div>
 
@@ -893,31 +837,36 @@ try {
                                 <a
                                     href="/#catalogo"
                                     class="hover:text-orange-500 transition"
-                                    >Explorar Historias</a>
+                                    >Explorar Historias</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="/upload"
                                     class="hover:text-orange-500 transition"
-                                    >Subir Historia</a>
+                                    >Subir Historia</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Listas de Lectura</a>
+                                    >Listas de Lectura</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Retos</a>
+                                    >Retos</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Tendencias</a>
+                                    >Tendencias</a
+                                >
                             </li>
                         </ul>
                     </div>
@@ -933,25 +882,29 @@ try {
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Sobre Folio</a>
+                                    >Sobre Folio</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="/blog"
                                     class="hover:text-orange-500 transition"
-                                    >Blog</a>
+                                    >Blog</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Empleo</a>
+                                    >Empleo</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Prensa</a>
+                                    >Prensa</a
+                                >
                             </li>
                         </ul>
                     </div>
@@ -967,31 +920,36 @@ try {
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Centro de Ayuda</a>
+                                    >Centro de Ayuda</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Comunidad</a>
+                                    >Comunidad</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Normas</a>
+                                    >Normas</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Privacidad</a>
+                                    >Privacidad</a
+                                >
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     class="hover:text-orange-500 transition"
-                                    >Términos</a>
+                                    >Términos</a
+                                >
                             </li>
                         </ul>
                     </div>
@@ -1013,397 +971,357 @@ try {
 </html>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // --- ACTUALIZACIÓN DINÁMICA DE RATINGS AL CARGAR LA PÁGINA ---
-    fetch('/aws/api/historias')
-        .then(res => res.json())
-        .then(json => {
-            if(json.data) {
-                json.data.forEach(historia => {
-                    const id = historia.id;
-                    const ratingReal = historia.attributes?.Rating || historia.Rating || 0;
-                    
-                    const tarjeta = document.querySelector(`.story-card[data-id="${id}"]`);
-                    if(tarjeta) {
-                        tarjeta.setAttribute('data-rating', ratingReal);
-                        const etiquetaNota = tarjeta.querySelector('.font-bold.text-gray-700');
-                        if(etiquetaNota) {
-                            etiquetaNota.textContent = ratingReal > 0 ? Number(ratingReal).toFixed(1) : "0.0";
-                        }
-                    }
+    document.addEventListener("DOMContentLoaded", () => {
+        // --- 1. AUTENTICACIÓN Y ESTADO GLOBAL ---
+        const token = sessionStorage.getItem("folio_token");
+        const userString = sessionStorage.getItem("folio_user");
+        const isLogged = !!(token && userString);
+
+        const loggedOutMenu = document.getElementById("loggedOutMenu");
+        const loggedInMenu = document.getElementById("loggedInMenu");
+
+        if (isLogged) {
+            const user = JSON.parse(userString);
+            const userNameEl = document.getElementById("userName");
+            const userAvatarEl = document.getElementById("userAvatar");
+            
+            if(userNameEl) userNameEl.textContent = user.username;
+            if(userAvatarEl) userAvatarEl.textContent = user.username.charAt(0).toUpperCase();
+
+            if(loggedInMenu) {
+                loggedInMenu.classList.remove("hidden");
+                loggedInMenu.classList.add("flex");
+            }
+
+            const logoutBtn = document.getElementById("logoutBtn");
+            if(logoutBtn) {
+                logoutBtn.addEventListener("click", () => {
+                    sessionStorage.removeItem("folio_token");
+                    sessionStorage.removeItem("folio_user");
+                    window.location.reload();
                 });
             }
-        })
-        .catch(err => console.error("Error actualizando ratings frescos:", err));
-
-    // --- 1. AUTENTICACIÓN Y ESTADO GLOBAL ---
-    const token = sessionStorage.getItem("folio_token");
-    const userString = sessionStorage.getItem("folio_user");
-    const isLogged = !!(token && userString);
-
-    const loggedOutMenu = document.getElementById("loggedOutMenu");
-    const loggedInMenu = document.getElementById("loggedInMenu");
-
-    if (isLogged) {
-        const user = JSON.parse(userString);
-        const userNameEl = document.getElementById("userName");
-        const userAvatarEl = document.getElementById("userAvatar");
-        
-        if(userNameEl) userNameEl.textContent = user.username;
-        if(userAvatarEl) userAvatarEl.textContent = user.username.charAt(0).toUpperCase();
-
-        if(loggedInMenu) {
-            loggedInMenu.classList.remove("hidden");
-            loggedInMenu.classList.add("flex");
-        }
-
-        const logoutBtn = document.getElementById("logoutBtn");
-        if(logoutBtn) {
-            logoutBtn.addEventListener("click", () => {
-                sessionStorage.removeItem("folio_token");
-                sessionStorage.removeItem("folio_user");
-                window.location.reload();
-            });
-        }
-    } else {
-        if(loggedOutMenu) {
-            loggedOutMenu.classList.remove("hidden");
-            loggedOutMenu.classList.add("flex");
-        }
-    }
-
-    // --- 2. LÓGICA DEL MINI MODAL (AVISO DE LOGIN) ---
-    const authModal = document.getElementById("authModal");
-    const authBackdrop = document.getElementById("authModalBackdrop");
-    const closeAuthBtn = document.getElementById("closeAuthModalBtn");
-
-    const showAuthModal = () => {
-        if (authModal) {
-            authModal.classList.remove("hidden");
-            document.body.style.overflow = "hidden";
-        }
-    };
-
-    const hideAuthModal = () => {
-        if (authModal) {
-            authModal.classList.add("hidden");
-            document.body.style.overflow = "";
-        }
-    };
-
-    if (closeAuthBtn) closeAuthBtn.addEventListener("click", hideAuthModal);
-    if (authBackdrop) authBackdrop.addEventListener("click", hideAuthModal);
-
-    const uploadLinks = document.querySelectorAll('a[href="/upload"]');
-    uploadLinks.forEach((link) => {
-        link.addEventListener("click", (e) => {
-            if (!isLogged) {
-                e.preventDefault();
-                showAuthModal();
+        } else {
+            if(loggedOutMenu) {
+                loggedOutMenu.classList.remove("hidden");
+                loggedOutMenu.classList.add("flex");
             }
-        });
-    });
-
-    // --- 3. LÓGICA DE FILTROS Y BUSCADOR COMBINADOS ---
-    const filterBtns = document.querySelectorAll(".filter-btn");
-    const storyCards = document.querySelectorAll(".story-card");
-    const storyCounter = document.getElementById("story-counter");
-    const searchInput = document.getElementById("searchInput");
-    const ratingFilter = document.getElementById("ratingFilter");
-    const ratingDisplay = document.getElementById("ratingDisplay");
-
-    let generoActivo = "all";
-    let busquedaActiva = "";
-    let ratingMinimo = 0;
-
-    const updateCounter = (count) => {
-        if (storyCounter) {
-            storyCounter.textContent = `${count} historia${count !== 1 ? "s" : ""} encontrada${count !== 1 ? "s" : ""}`;
         }
-    };
 
-    updateCounter(storyCards.length);
+        // --- 2. LÓGICA DEL MINI MODAL (AVISO DE LOGIN) ---
+        const authModal = document.getElementById("authModal");
+        const authBackdrop = document.getElementById("authModalBackdrop");
+        const closeAuthBtn = document.getElementById("closeAuthModalBtn");
 
-    const aplicarFiltrosYBusqueda = () => {
-        let visibleCount = 0;
-
-        storyCards.forEach((card) => {
-            const cardGenero = card.getAttribute("data-genero");
-            const cardTitulo = (card.getAttribute("data-titulo") || "").toLowerCase();
-            const cardAutor = (card.getAttribute("data-autor") || "").toLowerCase();
-            const cardRating = parseFloat(card.getAttribute("data-rating")) || 0;
-
-            const coincideGenero = generoActivo === "all" || cardGenero === generoActivo;
-            const coincideBusqueda = cardTitulo.includes(busquedaActiva) || cardAutor.includes(busquedaActiva);
-            const coincideRating = cardRating >= ratingMinimo;
-
-            if (coincideGenero && coincideBusqueda && coincideRating) {
-                card.style.display = "";
-                visibleCount++;
-            } else {
-                card.style.display = "none";
-            }
-        });
-
-        updateCounter(visibleCount);
-    };
-
-    if (ratingFilter) {
-        ratingFilter.addEventListener("input", (e) => {
-            ratingMinimo = parseFloat(e.target.value);
-            if (ratingDisplay) {
-                ratingDisplay.textContent = ratingMinimo === 0 ? "Todas" : `${ratingMinimo.toFixed(1)} ★`;
-            }
-            aplicarFiltrosYBusqueda();
-        });
-    }
-
-    if (searchInput) {
-        searchInput.addEventListener("input", (e) => {
-            busquedaActiva = e.target.value.toLowerCase().trim();
-            aplicarFiltrosYBusqueda();
-        });
-    }
-
-    filterBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            generoActivo = btn.getAttribute("data-filter");
-            filterBtns.forEach((b) => {
-                b.classList.remove("bg-gray-900", "text-white");
-                b.classList.add("bg-gray-100", "text-gray-700");
-            });
-            btn.classList.remove("bg-gray-100", "text-gray-700");
-            btn.classList.add("bg-gray-900", "text-white");
-            aplicarFiltrosYBusqueda();
-        });
-    });
-
-    // --- 4. MODAL DE LA HISTORIA PRINCIPAL Y CARGA DEL CHAT ---
-    const modal = document.getElementById("storyModal");
-    const backdrop = document.getElementById("modalBackdrop");
-    const closeBtn = document.getElementById("closeModalBtn");
-
-    const mCover = document.getElementById("modalCover");
-    const mGenre = document.getElementById("modalGenre");
-    const mTitle = document.getElementById("modalTitle");
-    const mAuthor = document.getElementById("modalAuthor");
-    const mRating = document.getElementById("modalRating");
-    const mSynopsis = document.getElementById("modalSynopsis");
-    const mReadBtn = document.getElementById("modalReadBtn");
-
-    const chatMessages = document.getElementById("chatMessages");
-    let currentHistoriaId = null;
-
-    const pintarMensaje = (nombre, texto, esPropio) => {
-        const inicial = nombre.charAt(0).toUpperCase();
-        const colorAvatar = esPropio ? "bg-gray-900 text-white" : "bg-orange-100 text-orange-600";
-        const colorTexto = esPropio ? "text-gray-800" : "text-gray-600";
-
-        return `
-        <div class="flex gap-3">
-            <div class="w-8 h-8 rounded-full ${colorAvatar} flex items-center justify-center font-bold text-xs flex-shrink-0">${inicial}</div>
-            <div class="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm ${colorTexto}">
-                <span class="font-bold text-gray-900 block mb-1">${nombre}</span>
-                ${texto}
-            </div>
-        </div>
-        `;
-    };
-
-    storyCards.forEach((card) => {
-        card.addEventListener("click", async () => {
-            currentHistoriaId = card.getAttribute("data-id");
-
-            const titulo = card.getAttribute("data-titulo");
-            const autor = card.getAttribute("data-autor");
-            const sinopsis = card.getAttribute("data-sinopsis");
-            const portada = card.getAttribute("data-portada");
-            const pdf = card.getAttribute("data-pdf");
-            const genero = card.getAttribute("data-genero");
-            const rating = card.getAttribute("data-rating");
-
-            if(mCover) mCover.src = portada;
-            if(mTitle) mTitle.textContent = titulo;
-            if(mAuthor) mAuthor.textContent = `por ${autor}`;
-            if(mGenre) mGenre.textContent = genero;
-            if(mRating) mRating.textContent = rating;
-            if(mSynopsis) mSynopsis.textContent = sinopsis;
-
-            if (mReadBtn) {
-                if (pdf && pdf !== "#") {
-                    mReadBtn.setAttribute("data-pdf-url", pdf);
-                    mReadBtn.setAttribute("data-filename", `${titulo.replace(/[^a-zA-Z0-9]/g, "_")}_Folio.pdf`);
-                    mReadBtn.classList.remove("opacity-50", "cursor-not-allowed");
-                    mReadBtn.innerHTML = `Descargar Manuscrito <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
-                } else {
-                    mReadBtn.removeAttribute("data-pdf-url");
-                    mReadBtn.classList.add("opacity-50", "cursor-not-allowed");
-                    mReadBtn.textContent = "Manuscrito no disponible";
-                }
-            }
-
-            if(chatMessages) chatMessages.innerHTML = '<p class="text-xs text-center text-gray-400 py-4">Cargando comentarios...</p>';
-
-            try {
-                const res = await fetch(`/aws/api/comentarios?filters[historia][id][$eq]=${currentHistoriaId}&sort=createdAt:asc`);
-                const json = await res.json();
-
-                if(chatMessages) chatMessages.innerHTML = "";
-
-                if (json.data && json.data.length > 0) {
-                    const currentUser = isLogged ? JSON.parse(userString).username : null;
-
-                    json.data.forEach((msg) => {
-                        const nombreAutor = msg.attributes?.NombreUsuario || msg.NombreUsuario || "Usuario";
-                        const textoComentario = msg.attributes?.Texto || msg.Texto || "";
-
-                        const esMio = nombreAutor === currentUser;
-                        if(chatMessages) chatMessages.innerHTML += pintarMensaje(nombreAutor, textoComentario, esMio);
-                    });
-                } else {
-                    if(chatMessages) chatMessages.innerHTML = '<p class="text-xs text-center text-gray-400 py-4">No hay comentarios aún. ¡Sé el primero!</p>';
-                }
-                if(chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
-            } catch (error) {
-                console.error("Error cargando chat:", error);
-                if(chatMessages) chatMessages.innerHTML = '<p class="text-xs text-center text-red-400 py-4">Error al cargar los comentarios.</p>';
-            }
-
-            if(modal) {
-                modal.classList.remove("hidden");
+        const showAuthModal = () => {
+            if (authModal) {
+                authModal.classList.remove("hidden");
                 document.body.style.overflow = "hidden";
             }
+        };
+
+        const hideAuthModal = () => {
+            if (authModal) {
+                authModal.classList.add("hidden");
+                document.body.style.overflow = "";
+            }
+        };
+
+        if (closeAuthBtn) closeAuthBtn.addEventListener("click", hideAuthModal);
+        if (authBackdrop) authBackdrop.addEventListener("click", hideAuthModal);
+
+        const uploadLinks = document.querySelectorAll('a[href="/upload"]');
+        uploadLinks.forEach((link) => {
+            link.addEventListener("click", (e) => {
+                if (!isLogged) {
+                    e.preventDefault();
+                    showAuthModal();
+                }
+            });
         });
-    });
 
-    const closeModal = () => {
-        if (modal) {
-            modal.classList.add("hidden");
-            document.body.style.overflow = "";
-        }
-    };
+        // --- 3. LÓGICA DE FILTROS Y BUSCADOR ---
+        const filterBtns = document.querySelectorAll(".filter-btn");
+        const storyCards = document.querySelectorAll(".story-card");
+        const storyCounter = document.getElementById("story-counter");
+        const searchInput = document.getElementById("searchInput");
 
-    if (closeBtn) closeBtn.addEventListener("click", closeModal);
-    if (backdrop) backdrop.addEventListener("click", closeModal);
+        let generoActivo = "all";
+        let busquedaActiva = "";
 
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            closeModal();
-            hideAuthModal();
-        }
-    });
-
-    // --- 5. ACCIONES PROTEGIDAS DEL MODAL ---
-    if (mReadBtn) {
-        mReadBtn.addEventListener("click", async (e) => {
-            e.preventDefault();
-
-            if (!isLogged) {
-                showAuthModal();
-                return;
+        const updateCounter = (count) => {
+            if (storyCounter) {
+                storyCounter.textContent = `${count} historia${count !== 1 ? "s" : ""} encontrada${count !== 1 ? "s" : ""}`;
             }
+        };
 
-            const pdfUrl = mReadBtn.getAttribute("data-pdf-url");
-            const fileName = mReadBtn.getAttribute("data-filename") || "historia.pdf";
-            if (!pdfUrl) return;
+        updateCounter(storyCards.length);
 
-            const originalText = mReadBtn.innerHTML;
-            mReadBtn.innerHTML = 'Descargando... <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
-            mReadBtn.classList.add("opacity-70", "pointer-events-none");
+        const aplicarFiltrosYBusqueda = () => {
+            let visibleCount = 0;
 
-            try {
-                const response = await fetch(pdfUrl);
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const tempLink = document.createElement("a");
-                tempLink.style.display = "none";
-                tempLink.href = url;
-                tempLink.download = fileName;
-                document.body.appendChild(tempLink);
-                tempLink.click();
-                window.URL.revokeObjectURL(url);
-                tempLink.remove();
-            } catch (error) {
-                console.error("Error descargando:", error);
-                alert("No se pudo descargar el archivo.");
-            } finally {
-                mReadBtn.innerHTML = originalText;
-                mReadBtn.classList.remove("opacity-70", "pointer-events-none");
-            }
-        });
-    }
+            storyCards.forEach((card) => {
+                const cardGenero = card.getAttribute("data-genero");
+                const cardTitulo = (card.getAttribute("data-titulo") || "").toLowerCase();
+                const cardAutor = (card.getAttribute("data-autor") || "").toLowerCase();
 
-    // --- ENVIAR CHAT A AWS ---
-    const chatForm = document.getElementById("chatForm");
-    const chatInput = document.getElementById("chatInput");
+                const coincideGenero = generoActivo === "all" || cardGenero === generoActivo;
+                const coincideBusqueda = cardTitulo.includes(busquedaActiva) || cardAutor.includes(busquedaActiva);
 
-    if (chatInput) {
-        chatInput.addEventListener("focus", (e) => {
-            if (!isLogged) {
-                e.target.blur();
-                showAuthModal();
-            }
-        });
-    }
-
-    if (chatForm) {
-        chatForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            if (!isLogged) {
-                showAuthModal();
-                return;
-            }
-
-            const text = chatInput.value.trim();
-            if (!text || !currentHistoriaId) return;
-
-            const user = JSON.parse(userString);
-            const botonEnvio = chatForm.querySelector("button");
-
-            if(botonEnvio) {
-                botonEnvio.disabled = true;
-                botonEnvio.classList.add("opacity-50");
-            }
-
-            try {
-                const res = await fetch("/aws/api/comentarios", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({
-                        data: {
-                            Texto: text,
-                            NombreUsuario: user.username,
-                            historia: currentHistoriaId,
-                        },
-                    }),
-                });
-
-                if (res.ok) {
-                    if (chatMessages && chatMessages.innerHTML.includes("No hay comentarios")) {
-                        chatMessages.innerHTML = "";
-                    }
-
-                    if(chatMessages) {
-                        chatMessages.insertAdjacentHTML("beforeend", pintarMensaje(user.username, text, true));
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                    }
-                    chatInput.value = "";
+                if (coincideGenero && coincideBusqueda) {
+                    card.style.display = "";
+                    visibleCount++;
                 } else {
-                    console.error("Strapi rechazó el mensaje.");
+                    card.style.display = "none";
                 }
-            } catch (error) {
-                console.error("Error de red enviando mensaje:", error);
-            } finally {
-                if(botonEnvio) {
-                    botonEnvio.disabled = false;
-                    botonEnvio.classList.remove("opacity-50");
+            });
+
+            updateCounter(visibleCount);
+        };
+
+        if (searchInput) {
+            searchInput.addEventListener("input", (e) => {
+                busquedaActiva = e.target.value.toLowerCase().trim();
+                aplicarFiltrosYBusqueda();
+            });
+        }
+
+        filterBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                generoActivo = btn.getAttribute("data-filter");
+                filterBtns.forEach((b) => {
+                    b.classList.remove("bg-gray-900", "text-white");
+                    b.classList.add("bg-gray-100", "text-gray-700");
+                });
+                btn.classList.remove("bg-gray-100", "text-gray-700");
+                btn.classList.add("bg-gray-900", "text-white");
+                aplicarFiltrosYBusqueda();
+            });
+        });
+
+        // --- 4. MODAL DE LA HISTORIA PRINCIPAL Y CARGA DEL CHAT ---
+        const modal = document.getElementById("storyModal");
+        const backdrop = document.getElementById("modalBackdrop");
+        const closeBtn = document.getElementById("closeModalBtn");
+
+        const mCover = document.getElementById("modalCover");
+        const mGenre = document.getElementById("modalGenre");
+        const mTitle = document.getElementById("modalTitle");
+        const mAuthor = document.getElementById("modalAuthor");
+        const mSynopsis = document.getElementById("modalSynopsis");
+        const mReadBtn = document.getElementById("modalReadBtn");
+
+        const chatMessages = document.getElementById("chatMessages");
+        let currentHistoriaId = null;
+
+        const pintarMensaje = (nombre, texto, esPropio) => {
+            const inicial = nombre.charAt(0).toUpperCase();
+            const colorAvatar = esPropio ? "bg-gray-900 text-white" : "bg-orange-100 text-orange-600";
+            const colorTexto = esPropio ? "text-gray-800" : "text-gray-600";
+
+            return `
+            <div class="flex gap-3">
+                <div class="w-8 h-8 rounded-full ${colorAvatar} flex items-center justify-center font-bold text-xs flex-shrink-0">${inicial}</div>
+                <div class="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm ${colorTexto}">
+                    <span class="font-bold text-gray-900 block mb-1">${nombre}</span>
+                    ${texto}
+                </div>
+            </div>
+            `;
+        };
+
+        storyCards.forEach((card) => {
+            card.addEventListener("click", async () => {
+                currentHistoriaId = card.getAttribute("data-id");
+
+                const titulo = card.getAttribute("data-titulo");
+                const autor = card.getAttribute("data-autor");
+                const sinopsis = card.getAttribute("data-sinopsis");
+                const portada = card.getAttribute("data-portada");
+                const pdf = card.getAttribute("data-pdf");
+                const genero = card.getAttribute("data-genero");
+
+                if(mCover) mCover.src = portada;
+                if(mTitle) mTitle.textContent = titulo;
+                if(mAuthor) mAuthor.textContent = `por ${autor}`;
+                if(mGenre) mGenre.textContent = genero;
+                if(mSynopsis) mSynopsis.textContent = sinopsis;
+
+                if (mReadBtn) {
+                    if (pdf && pdf !== "#") {
+                        mReadBtn.setAttribute("data-pdf-url", pdf);
+                        mReadBtn.setAttribute("data-filename", `${titulo.replace(/[^a-zA-Z0-9]/g, "_")}_Folio.pdf`);
+                        mReadBtn.classList.remove("opacity-50", "cursor-not-allowed");
+                        mReadBtn.innerHTML = `Descargar Manuscrito <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
+                    } else {
+                        mReadBtn.removeAttribute("data-pdf-url");
+                        mReadBtn.classList.add("opacity-50", "cursor-not-allowed");
+                        mReadBtn.textContent = "Manuscrito no disponible";
+                    }
                 }
+
+                if(chatMessages) chatMessages.innerHTML = '<p class="text-xs text-center text-gray-400 py-4">Cargando comentarios...</p>';
+
+                try {
+                    const res = await fetch(`/aws/api/comentarios?filters[historia][id][$eq]=${currentHistoriaId}&sort=createdAt:asc`);
+                    const json = await res.json();
+
+                    if(chatMessages) chatMessages.innerHTML = "";
+
+                    if (json.data && json.data.length > 0) {
+                        const currentUser = isLogged ? JSON.parse(userString).username : null;
+
+                        json.data.forEach((msg) => {
+                            const nombreAutor = msg.attributes?.NombreUsuario || msg.NombreUsuario || "Usuario";
+                            const textoComentario = msg.attributes?.Texto || msg.Texto || "";
+
+                            const esMio = nombreAutor === currentUser;
+                            if(chatMessages) chatMessages.innerHTML += pintarMensaje(nombreAutor, textoComentario, esMio);
+                        });
+                    } else {
+                        if(chatMessages) chatMessages.innerHTML = '<p class="text-xs text-center text-gray-400 py-4">No hay comentarios aún. ¡Sé el primero!</p>';
+                    }
+                    if(chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+                } catch (error) {
+                    console.error("Error cargando chat:", error);
+                    if(chatMessages) chatMessages.innerHTML = '<p class="text-xs text-center text-red-400 py-4">Error al cargar los comentarios.</p>';
+                }
+
+                if(modal) {
+                    modal.classList.remove("hidden");
+                    document.body.style.overflow = "hidden";
+                }
+            });
+        });
+
+        const closeModal = () => {
+            if (modal) {
+                modal.classList.add("hidden");
+                document.body.style.overflow = "";
+            }
+        };
+
+        if (closeBtn) closeBtn.addEventListener("click", closeModal);
+        if (backdrop) backdrop.addEventListener("click", closeModal);
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                closeModal();
+                hideAuthModal();
             }
         });
-    }
-  });
+
+        // --- 5. ACCIONES PROTEGIDAS DEL MODAL ---
+        if (mReadBtn) {
+            mReadBtn.addEventListener("click", async (e) => {
+                e.preventDefault();
+
+                if (!isLogged) {
+                    showAuthModal();
+                    return;
+                }
+
+                const pdfUrl = mReadBtn.getAttribute("data-pdf-url");
+                const fileName = mReadBtn.getAttribute("data-filename") || "historia.pdf";
+                if (!pdfUrl) return;
+
+                const originalText = mReadBtn.innerHTML;
+                mReadBtn.innerHTML = 'Descargando... <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+                mReadBtn.classList.add("opacity-70", "pointer-events-none");
+
+                try {
+                    const response = await fetch(pdfUrl);
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const tempLink = document.createElement("a");
+                    tempLink.style.display = "none";
+                    tempLink.href = url;
+                    tempLink.download = fileName;
+                    document.body.appendChild(tempLink);
+                    tempLink.click();
+                    window.URL.revokeObjectURL(url);
+                    tempLink.remove();
+                } catch (error) {
+                    console.error("Error descargando:", error);
+                    alert("No se pudo descargar el archivo.");
+                } finally {
+                    mReadBtn.innerHTML = originalText;
+                    mReadBtn.classList.remove("opacity-70", "pointer-events-none");
+                }
+            });
+        }
+
+        // --- ENVIAR CHAT A AWS ---
+        const chatForm = document.getElementById("chatForm");
+        const chatInput = document.getElementById("chatInput");
+
+        if (chatInput) {
+            chatInput.addEventListener("focus", (e) => {
+                if (!isLogged) {
+                    e.target.blur();
+                    showAuthModal();
+                }
+            });
+        }
+
+        if (chatForm) {
+            chatForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                if (!isLogged) {
+                    showAuthModal();
+                    return;
+                }
+
+                const text = chatInput.value.trim();
+                if (!text || !currentHistoriaId) return;
+
+                const user = JSON.parse(userString);
+                const botonEnvio = chatForm.querySelector("button");
+
+                if(botonEnvio) {
+                    botonEnvio.disabled = true;
+                    botonEnvio.classList.add("opacity-50");
+                }
+
+                try {
+                    const res = await fetch("/aws/api/comentarios", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({
+                            data: {
+                                Texto: text,
+                                NombreUsuario: user.username,
+                                historia: currentHistoriaId,
+                            },
+                        }),
+                    });
+
+                    if (res.ok) {
+                        if (chatMessages && chatMessages.innerHTML.includes("No hay comentarios")) {
+                            chatMessages.innerHTML = "";
+                        }
+
+                        if(chatMessages) {
+                            chatMessages.insertAdjacentHTML("beforeend", pintarMensaje(user.username, text, true));
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
+                        chatInput.value = "";
+                    } else {
+                        console.error("Strapi rechazó el mensaje.");
+                    }
+                } catch (error) {
+                    console.error("Error de red enviando mensaje:", error);
+                } finally {
+                    if(botonEnvio) {
+                        botonEnvio.disabled = false;
+                        botonEnvio.classList.remove("opacity-50");
+                    }
+                }
+            });
+        }
+    });
 </script>
