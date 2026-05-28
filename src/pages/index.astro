@@ -1047,6 +1047,33 @@ try {
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        // --- ACTUALIZACIÓN DINÁMICA DE RATINGS AL CARGAR LA PÁGINA ---
+    // Esto sobreescribe la "fotografía" estática de Astro con los datos reales y frescos
+    fetch('/aws/api/historias')
+        .then(res => res.json())
+        .then(json => {
+            if(json.data) {
+                json.data.forEach(historia => {
+                    const id = historia.id;
+                    const ratingReal = historia.attributes?.Rating || historia.Rating || 0;
+                    
+                    // Buscamos la tarjeta de este libro en el HTML
+                    const tarjeta = document.querySelector(`.story-card[data-id="${id}"]`);
+                    if(tarjeta) {
+                        // Actualizamos su atributo oculto (para que el filtro funcione)
+                        tarjeta.setAttribute('data-rating', ratingReal);
+                        // Actualizamos el numerito visual (ej: 3.7)
+                        const etiquetaNota = tarjeta.querySelector('.font-bold.text-gray-700');
+                        if(etiquetaNota) {
+                            // Mostrar 1 decimal si es mayor que 0
+                            etiquetaNota.textContent = ratingReal > 0 ? Number(ratingReal).toFixed(1) : "0.0";
+                        }
+                    }
+                });
+            }
+        })
+        .catch(err => console.error("Error actualizando ratings frescos:", err));
+        
         // --- 1. AUTENTICACIÓN Y ESTADO GLOBAL ---
         const token = sessionStorage.getItem("folio_token");
         const userString = sessionStorage.getItem("folio_user");
@@ -1477,11 +1504,9 @@ try {
                         },
                         body: JSON.stringify({
                             data: {
-                                Texto: textoCamuflado,
-                                NombreUsuario: user.username,
-                                historia: currentHistoriaId,
-                            },
-                        }),
+                                Rating: parseFloat(nuevaMedia)
+                            }
+                        })
                     });
 
                     if (res.ok) {
