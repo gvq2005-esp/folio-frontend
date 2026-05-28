@@ -544,7 +544,7 @@ try {
                 <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
                     <p>© 2026 Folio. Todos los derechos reservados.</p>
                     <p class="flex items-center gap-1">
-                        Hecho con <span class="text-red-400 text-lg leading-none">♥</span> para lectores de todo el mundo
+                        Hecho con <span class="text-red-400 text-lg leading-none">♥</span> para lectores
                     </p>
                 </div>
             </div>
@@ -604,15 +604,15 @@ try {
     if(authBackdrop) authBackdrop.addEventListener('click', hideAuthModal);
 
     // Proteger enlace superior de subir historia
-    const navUploadBtn = document.getElementById('navUploadBtn');
-    if(navUploadBtn) {
-        navUploadBtn.addEventListener('click', (e) => {
+    const uploadLinks = document.querySelectorAll('a[href="/upload"]');
+    uploadLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
             if (!isLogged) {
-                e.preventDefault(); // Evita ir a /upload
-                showAuthModal();
+                e.preventDefault(); 
+                showAuthModal();    
             }
         });
-    }
+    });
 
 
     // --- 3. LÓGICA DE FILTROS ---
