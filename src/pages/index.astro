@@ -1073,7 +1073,6 @@ try {
             }
         })
         .catch(err => console.error("Error actualizando ratings frescos:", err));
-
         // --- 1. AUTENTICACIÓN Y ESTADO GLOBAL ---
         const token = sessionStorage.getItem("folio_token");
         const userString = sessionStorage.getItem("folio_user");
@@ -1563,21 +1562,18 @@ try {
                                 : "0.0";
 
                         // --- 3. ACTUALIZAR EL RATING EN LA COLECCIÓN DE HISTORIAS DE STRAPI ---
-const peticionNota = await fetch(`/aws/api/historias/${currentHistoriaId}`, {
-    method: 'PUT',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({
-        data: {
-            Rating: parseFloat(nuevaMedia) // Forzamos que sea un número real
-        }
-    })
-});
-
-const respuestaNota = await peticionNota.json();
-console.log("Respuesta de Strapi al intentar guardar el Rating:", respuestaNota);
+                        await fetch(`/aws/api/historias/${currentHistoriaId}`, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`,
+                            },
+                            body: JSON.stringify({
+                                data: {
+                                    Rating: nuevaMedia, // Sobrescribimos el rating existente con el nuevo promedio
+                                },
+                            }),
+                        });
 
                         // Actualizamos la nota visual del modal al instante
                         mRating.textContent = nuevaMedia;
