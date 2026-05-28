@@ -1,0 +1,216 @@
+---
+// src/pages/blog.astro
+import '../styles/global.css';
+
+// Reutilizamos la lógica del logo para mantener la coherencia
+let logoUrl = "/favicon.svg"; 
+
+try {
+  const logoResponse = await fetch('http://51.21.220.203/api/Logo?populate=*');
+  const logoJson = await logoResponse.json();
+  const logoPath = logoJson.data?.logo?.url || logoJson.data?.logo?.[0]?.url;
+  if (logoPath) {
+    logoUrl = `/aws${logoPath}`;
+  }
+} catch (error) {
+  console.error("Error conectando con Strapi para el logo:", error);
+}
+
+// Datos falsos para los 4 artículos del blog (Mock data)
+const articulos = [
+  {
+    id: 1,
+    titulo: "El auge de los autores independientes en 2026",
+    resumen: "El panorama literario está cambiando. Descubre cómo las plataformas de autopublicación están democratizando el acceso a millones de lectores en todo el mundo sin necesidad de editoriales tradicionales.",
+    categoria: "Tendencias",
+    fecha: "28 de Mayo, 2026",
+    autor: "Equipo Folio",
+    imagen: "https://images.unsplash.com/photo-1455390582262-044cdead27d8?q=80&w=1000&auto=format&fit=crop",
+    destacado: true
+  },
+  {
+    id: 2,
+    titulo: "Novedades en Folio: Nuevo sistema de reseñas en vivo",
+    resumen: "Hemos escuchado vuestras peticiones. Ahora puedes interactuar en tiempo real con tus autores favoritos gracias al nuevo sistema de chat y valoraciones integrado.",
+    categoria: "Novedades",
+    fecha: "25 de Mayo, 2026",
+    autor: "Desarrollo",
+    imagen: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?q=80&w=800&auto=format&fit=crop",
+    destacado: false
+  },
+  {
+    id: 3,
+    titulo: "5 consejos para enganchar desde el primer capítulo",
+    resumen: "El primer capítulo es tu carta de presentación. Te enseñamos las técnicas narrativas infalibles para que tus lectores no puedan soltar tu historia.",
+    categoria: "Escritura",
+    fecha: "18 de Mayo, 2026",
+    autor: "Sarah Jenkins",
+    imagen: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=800&auto=format&fit=crop",
+    destacado: false
+  },
+  {
+    id: 4,
+    titulo: "Cómo diseñar una portada atractiva sin ser diseñador",
+    resumen: "No juzgues un libro por su portada... a menos que estés en internet. Herramientas y tips básicos para crear portadas que destaquen en el catálogo.",
+    categoria: "Recursos",
+    fecha: "10 de Mayo, 2026",
+    autor: "Equipo Folio",
+    imagen: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+    destacado: false
+  }
+];
+
+const articuloDestacado = articulos.find(a => a.destacado);
+const articulosSecundarios = articulos.filter(a => !a.destacado);
+---
+
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href={logoUrl} />
+    <meta name="viewport" content="width=device-width" />
+    <title>Blog | Folio</title>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased">
+    
+    <!-- HEADER EXACTAMENTE IGUAL QUE INDEX -->
+    <header class="bg-gray-50 border-b border-gray-100 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-6">
+        <a href="/" class="flex items-center gap-2.5 flex-shrink-0">
+          <div class="h-16 w-16 flex items-center justify-center overflow-hidden">
+            <img src={logoUrl} alt="Logo Folio" class="h-full w-full object-contain p-1" />
+          </div>
+          <span class="text-3xl font-extrabold tracking-tighter text-gray-950">Folio<span class="text-orange-500">.</span></span>
+        </a>
+
+        <nav class="flex items-center gap-8 text-md font-medium flex-shrink-0 ml-auto">
+          <a href="/#catalogo" class="text-gray-700 hover:text-orange-600 transition">Explorar</a>
+          <a href="/blog" class="text-orange-600 border-b-2 border-orange-500 pb-1">Blog</a>
+          <a href="/upload" class="text-gray-700 hover:text-orange-600 transition">Subir historia</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="min-h-screen">
+        <!-- HERO SECTION DEL BLOG -->
+        <section class="bg-white border-b border-gray-200 py-20 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-[0.02] pointer-events-none">
+                <!-- Mismo patrón de fondo sutil que el index -->
+                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="grid-blog" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="black" stroke-width="1"></path>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid-blog)"></rect>
+                </svg>
+            </div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <span class="text-sm font-bold text-orange-500 uppercase tracking-widest mb-4 block">Descubre, aprende, inspírate</span>
+                <h1 class="text-5xl md:text-6xl font-extrabold tracking-tighter text-gray-950 mb-6">
+                    El Blog de Folio<span class="text-orange-500">.</span>
+                </h1>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Consejos de escritura, novedades de la plataforma y el mejor rincón para la comunidad de autores independientes.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE ARTÍCULOS -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            
+            <!-- ARTÍCULO DESTACADO (1) -->
+            {articuloDestacado && (
+                <div class="mb-16">
+                    <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-6">Lectura Destacada</h2>
+                    <a href="#" class="group block bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row">
+                        <div class="w-full md:w-3/5 h-64 md:h-96 overflow-hidden relative">
+                            <img src={articuloDestacado.imagen} alt={articuloDestacado.titulo} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div class="absolute top-4 left-4">
+                                <span class="bg-white text-gray-900 text-xs font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-md">
+                                    {articuloDestacado.categoria}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-2/5 p-8 md:p-12 flex flex-col justify-center">
+                            <div class="flex items-center gap-3 text-sm text-gray-500 mb-4 font-medium">
+                                <span>{articuloDestacado.fecha}</span>
+                                <span>•</span>
+                                <span>{articuloDestacado.autor}</span>
+                            </div>
+                            <h3 class="text-3xl font-extrabold text-gray-900 leading-tight mb-4 group-hover:text-orange-600 transition-colors">
+                                {articuloDestacado.titulo}
+                            </h3>
+                            <p class="text-gray-600 text-lg mb-8 line-clamp-3">
+                                {articuloDestacado.resumen}
+                            </p>
+                            <span class="inline-flex items-center gap-2 text-orange-500 font-bold group-hover:text-orange-600 mt-auto">
+                                Leer artículo
+                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            )}
+
+            <!-- CUADRÍCULA DE ARTÍCULOS SECUNDARIOS (3) -->
+            <div>
+                <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-6">Últimas Publicaciones</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {articulosSecundarios.map((articulo) => (
+                        <a href="#" class="group flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+                            <div class="h-48 w-full overflow-hidden relative">
+                                <img src={articulo.imagen} alt={articulo.titulo} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                <div class="absolute top-3 left-3">
+                                    <span class="bg-white/90 backdrop-blur-sm text-gray-900 text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full shadow-sm">
+                                        {articulo.categoria}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow">
+                                <div class="flex items-center gap-2 text-xs text-gray-500 mb-3 font-medium">
+                                    <span>{articulo.fecha}</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900 leading-tight mb-3 group-hover:text-orange-600 transition-colors line-clamp-2">
+                                    {articulo.titulo}
+                                </h3>
+                                <p class="text-gray-600 text-sm mb-6 line-clamp-3 flex-grow">
+                                    {articulo.resumen}
+                                </p>
+                                <span class="inline-flex items-center gap-1 text-orange-500 font-bold text-sm mt-auto group-hover:text-orange-600">
+                                    Leer más
+                                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </span>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            </div>
+
+            <!-- BOTÓN CARGAR MÁS -->
+            <div class="mt-16 flex justify-center">
+                <button class="bg-gray-900 text-white px-8 py-3.5 rounded-full font-bold hover:bg-orange-500 transition shadow-md">
+                    Cargar más artículos
+                </button>
+            </div>
+            
+        </section>
+    </main>
+
+    <!-- FOOTER EXACTAMENTE IGUAL QUE INDEX -->
+    <footer class="bg-white border-t border-gray-100 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl font-extrabold tracking-tighter text-gray-950">Folio<span class="text-orange-500">.</span></span>
+                    <span>© 2026 Folio. All rights reserved.</span>
+                </div>
+                <p class="flex items-center gap-1">
+                    Made with <span class="text-red-400 text-lg leading-none">♥</span> for readers everywhere
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
