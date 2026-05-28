@@ -269,20 +269,31 @@ try {
                                 </div>
 
                                 <div class="mb-8">
-                                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-                                        Valoración
-                                    </h4>
-                                    <ul class="space-y-2 text-sm text-gray-600">
-                                        <li class="rating-btn flex items-center gap-3 px-3 py-2 hover:bg-gray-50 text-gray-600 rounded-lg cursor-pointer transition">
-                                            <div class="dot h-1.5 w-1.5 rounded-full bg-gray-300"></div>
-                                            <span class="text-orange-400 text-xs">★★★★☆</span> 4.0 o superior
-                                        </li>
-                                        <li class="rating-btn flex items-center gap-3 border border-orange-300 bg-orange-50 text-orange-700 font-semibold px-3 py-2 rounded-lg cursor-pointer transition">
-                                            <div class="dot h-1.5 w-1.5 rounded-full bg-orange-500"></div>
-                                            Todas las valoraciones
-                                        </li>
-                                    </ul>
-                                </div>
+    <div class="flex justify-between items-center mb-3">
+        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">
+            Nota mínima
+        </h4>
+        <span id="ratingDisplay" class="text-orange-500 font-extrabold text-sm bg-orange-50 px-2 py-0.5 rounded-md border border-orange-100">
+            Todas
+        </span>
+    </div>
+    <div class="relative pt-1">
+        <input 
+            type="range" 
+            id="ratingFilter" 
+            min="0" 
+            max="5" 
+            step="0.5" 
+            value="0" 
+            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500 hover:accent-orange-600 transition-all"
+        />
+        <div class="flex justify-between text-[10px] text-gray-400 mt-2 font-bold px-1">
+            <span>0</span>
+            <span>2.5</span>
+            <span>5.0</span>
+        </div>
+    </div>
+</div>
                             </div>
                         </aside>
 
@@ -620,10 +631,13 @@ try {
     const storyCards = document.querySelectorAll('.story-card');
     const storyCounter = document.getElementById('story-counter');
     const searchInput = document.getElementById('searchInput');
+    const ratingFilter = document.getElementById('ratingFilter');
+    const ratingDisplay = document.getElementById('ratingDisplay');
 
-    // Estado global de los filtros para que convivan perfectamente entre sí
+    // Estado global de TODOS los filtros
     let generoActivo = 'all';
     let busquedaActiva = '';
+    let ratingMinimo = 0; // Añadimos el estado de las estrellas
 
     const updateCounter = (count) => {
       if(storyCounter) {
@@ -631,27 +645,27 @@ try {
       }
     };
     
-    // Inicializamos el contador nada más cargar
     updateCounter(storyCards.length);
 
-    // La función maestra que evalúa cada tarjeta frente a todos los filtros activos
+    // FUNCIÓN MAESTRA ACTUALIZADA
     const aplicarFiltrosYBusqueda = () => {
         let visibleCount = 0;
 
         storyCards.forEach(card => {
             const cardGenero = card.getAttribute('data-genero');
-            // Pasamos a minúsculas para que la búsqueda no sea estricta con mayúsculas/minúsculas
             const cardTitulo = (card.getAttribute('data-titulo') || '').toLowerCase();
             const cardAutor = (card.getAttribute('data-autor') || '').toLowerCase();
+            const cardRating = parseFloat(card.getAttribute('data-rating')) || 0; // Extraemos la nota
 
             // 1. Condición del Género
             const coincideGenero = generoActivo === 'all' || cardGenero === generoActivo;
-
-            // 2. Condición del Buscador (puede coincidir con el título O con el autor)
+            // 2. Condición del Buscador
             const coincideBusqueda = cardTitulo.includes(busquedaActiva) || cardAutor.includes(busquedaActiva);
+            // 3. Condición de las Estrellas
+            const coincideRating = cardRating >= ratingMinimo;
 
-            // Si cumple ambas directrices a la vez, se muestra; si no, se oculta
-            if (coincideGenero && coincideBusqueda) {
+            // Si cumple las tres directrices, se muestra
+            if (coincideGenero && coincideBusqueda && coincideRating) {
                 card.style.display = ''; 
                 visibleCount++;
             } else {
@@ -659,11 +673,20 @@ try {
             }
         });
 
-        // Actualizamos el contador dinámico con las que han sobrevivido
         updateCounter(visibleCount);
     };
 
-    // ESCUCHADOR DEL BUSCADOR (Evento 'input' para que filtre en tiempo real letra a letra)
+    // ESCUCHADOR DEL SLIDER DE ESTRELLAS
+    if (ratingFilter) {
+        ratingFilter.addEventListener('input', (e) => {
+            ratingMinimo = parseFloat(e.target.value);
+            if(ratingDisplay) {
+                ratingDisplay.textContent = ratingMinimo === 0 ? 'Todas' : `${ratingMinimo.toFixed(1)} ★`;
+            }
+            aplicarFiltrosYBusqueda();
+        });
+    }
+
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             busquedaActiva = e.target.value.toLowerCase().trim();
@@ -671,20 +694,15 @@ try {
         });
     }
 
-    // ESCUCHADOR DE LOS BOTONES DE GÉNERO
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         generoActivo = btn.getAttribute('data-filter');
-
-        // Intercambio de clases estéticas para marcar cuál está activo
         filterBtns.forEach(b => {
           b.classList.remove('bg-gray-900', 'text-white');
           b.classList.add('bg-gray-100', 'text-gray-700');
         });
         btn.classList.remove('bg-gray-100', 'text-gray-700');
         btn.classList.add('bg-gray-900', 'text-white');
-
-        // Ejecutamos el filtrado
         aplicarFiltrosYBusqueda();
       });
     });
@@ -877,14 +895,19 @@ try {
         });
     }
 
-    // B. Estrellas (Mismo código que tenías)
+    // B. Estrellas interactivas
     const stars = document.querySelectorAll('#interactiveStars span');
+    let estrellasSeleccionadas = 5; // 5 estrellas por defecto
+
     stars.forEach((star, index) => {
         star.addEventListener('click', () => {
             if (!isLogged) {
                 showAuthModal(); 
                 return;
             }
+            
+            estrellasSeleccionadas = index + 1; // Guardamos el número del 1 al 5
+            
             stars.forEach((s, i) => {
                 if(i <= index) {
                     s.classList.remove('text-gray-300');
@@ -896,6 +919,78 @@ try {
             });
         });
     });
+
+    // C. ENVIAR CHAT Y VALORACIÓN A AWS
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+
+    if(chatInput) {
+        chatInput.addEventListener('focus', (e) => {
+            if (!isLogged) {
+                e.target.blur(); 
+                showAuthModal(); 
+            }
+        });
+    }
+
+    if(chatForm) {
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!isLogged) {
+                showAuthModal();
+                return;
+            }
+
+            const text = chatInput.value.trim();
+            if (!text || !currentHistoriaId) return;
+
+            const user = JSON.parse(userString);
+            const botonEnvio = chatForm.querySelector('button');
+            
+            botonEnvio.disabled = true;
+            botonEnvio.classList.add('opacity-50');
+
+            try {
+                const res = await fetch('/aws/api/comentarios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        data: {
+                            Texto: text,
+                            NombreUsuario: user.username,
+                            historia: currentHistoriaId,
+                            Valoracion: estrellasSeleccionadas // ¡AQUÍ ENVIAMOS LAS ESTRELLAS A STRAPI!
+                        }
+                    })
+                });
+
+                if (res.ok) {
+                    if (chatMessages.innerHTML.includes('No hay comentarios')) {
+                        chatMessages.innerHTML = '';
+                    }
+                    
+                    // Mostramos las estrellas junto al nombre en el chat visualmente
+                    const estrellasTexto = '★'.repeat(estrellasSeleccionadas) + '☆'.repeat(5 - estrellasSeleccionadas);
+                    const mensajeVisual = `${text} <br><span class="text-orange-400 text-xs mt-1 block">${estrellasTexto}</span>`;
+
+                    chatMessages.insertAdjacentHTML('beforeend', pintarMensaje(user.username, mensajeVisual, true));
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    chatInput.value = '';
+                } else {
+                    console.error("Strapi rechazó el mensaje. ¿Has creado el campo Valoracion?");
+                }
+            } catch (error) {
+                console.error("Error de red enviando mensaje:", error);
+            } finally {
+                botonEnvio.disabled = false;
+                botonEnvio.classList.remove('opacity-50');
+            }
+        });
+    
 
     // C. ENVIAR CHAT A AWS
     const chatForm = document.getElementById('chatForm');
