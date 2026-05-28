@@ -615,22 +615,68 @@ try {
     });
 
 
-    // --- 3. LÓGICA DE FILTROS ---
+    // --- 3. LÓGICA DE FILTROS Y BUSCADOR COMBINADOS ---
     const filterBtns = document.querySelectorAll('.filter-btn');
     const storyCards = document.querySelectorAll('.story-card');
     const storyCounter = document.getElementById('story-counter');
+    const searchInput = document.getElementById('searchInput');
+
+    // Estado global de los filtros para que convivan perfectamente entre sí
+    let generoActivo = 'all';
+    let busquedaActiva = '';
 
     const updateCounter = (count) => {
       if(storyCounter) {
           storyCounter.textContent = `${count} historia${count !== 1 ? 's' : ''} encontrada${count !== 1 ? 's' : ''}`;
       }
     };
+    
+    // Inicializamos el contador nada más cargar
     updateCounter(storyCards.length);
 
+    // La función maestra que evalúa cada tarjeta frente a todos los filtros activos
+    const aplicarFiltrosYBusqueda = () => {
+        let visibleCount = 0;
+
+        storyCards.forEach(card => {
+            const cardGenero = card.getAttribute('data-genero');
+            // Pasamos a minúsculas para que la búsqueda no sea estricta con mayúsculas/minúsculas
+            const cardTitulo = (card.getAttribute('data-titulo') || '').toLowerCase();
+            const cardAutor = (card.getAttribute('data-autor') || '').toLowerCase();
+
+            // 1. Condición del Género
+            const coincideGenero = generoActivo === 'all' || cardGenero === generoActivo;
+
+            // 2. Condición del Buscador (puede coincidir con el título O con el autor)
+            const coincideBusqueda = cardTitulo.includes(busquedaActiva) || cardAutor.includes(busquedaActiva);
+
+            // Si cumple ambas directrices a la vez, se muestra; si no, se oculta
+            if (coincideGenero && coincideBusqueda) {
+                card.style.display = ''; 
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Actualizamos el contador dinámico con las que han sobrevivido
+        updateCounter(visibleCount);
+    };
+
+    // ESCUCHADOR DEL BUSCADOR (Evento 'input' para que filtre en tiempo real letra a letra)
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            busquedaActiva = e.target.value.toLowerCase().trim();
+            aplicarFiltrosYBusqueda();
+        });
+    }
+
+    // ESCUCHADOR DE LOS BOTONES DE GÉNERO
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        const filterValue = btn.getAttribute('data-filter');
+        generoActivo = btn.getAttribute('data-filter');
 
+        // Intercambio de clases estéticas para marcar cuál está activo
         filterBtns.forEach(b => {
           b.classList.remove('bg-gray-900', 'text-white');
           b.classList.add('bg-gray-100', 'text-gray-700');
@@ -638,18 +684,8 @@ try {
         btn.classList.remove('bg-gray-100', 'text-gray-700');
         btn.classList.add('bg-gray-900', 'text-white');
 
-        let visibleCount = 0;
-        
-        storyCards.forEach(card => {
-          const cardGenero = card.getAttribute('data-genero');
-          if (filterValue === 'all' || cardGenero === filterValue) {
-            card.style.display = ''; 
-            visibleCount++;
-          } else {
-            card.style.display = 'none';
-          }
-        });
-        updateCounter(visibleCount);
+        // Ejecutamos el filtrado
+        aplicarFiltrosYBusqueda();
       });
     });
 
