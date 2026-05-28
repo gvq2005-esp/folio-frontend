@@ -434,6 +434,17 @@ try {
                         </a>
                     </div>
 
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 mb-6 shadow-sm">
+    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 text-center">Tu valoración para esta obra</p>
+    <div class="flex justify-center gap-2 text-2xl text-gray-300 cursor-pointer" id="interactiveStars">
+        <span class="hover:text-orange-400 transition select-none">★</span>
+        <span class="hover:text-orange-400 transition select-none">★</span>
+        <span class="hover:text-orange-400 transition select-none">★</span>
+        <span class="hover:text-orange-400 transition select-none">★</span>
+        <span class="hover:text-orange-400 transition select-none">★</span>
+    </div>
+</div>
+
                     <div class="w-full md:w-1/2 flex flex-col bg-white">
                         <div class="p-6 border-b border-gray-100">
                             <h3 class="font-bold text-gray-900 flex items-center gap-2">
@@ -604,7 +615,6 @@ try {
     if(closeAuthBtn) closeAuthBtn.addEventListener('click', hideAuthModal);
     if(authBackdrop) authBackdrop.addEventListener('click', hideAuthModal);
 
-    // Proteger enlaces de subir historia
     const uploadLinks = document.querySelectorAll('a[href="/upload"]');
     uploadLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -740,6 +750,10 @@ try {
             mRating.textContent = rating;
             mSynopsis.textContent = sinopsis;
             
+            // Resetear estrellas interactivas del modal a 5 por defecto cada vez que se abre un libro
+            estrellasSeleccionadas = 5;
+            stars.forEach(s => { s.classList.remove('text-gray-300'); s.classList.add('text-orange-400'); });
+
             if (pdf && pdf !== '#') {
                 mReadBtn.setAttribute('data-pdf-url', pdf);
                 mReadBtn.setAttribute('data-filename', `${titulo.replace(/[^a-zA-Z0-9]/g, '_')}_Folio.pdf`);
@@ -764,10 +778,29 @@ try {
                     
                     json.data.forEach(msg => {
                         const nombreAutor = msg.attributes?.NombreUsuario || msg.NombreUsuario || "Usuario";
-                        const textoComentario = msg.attributes?.Texto || msg.Texto || "";
+                        const textoCompleto = msg.attributes?.Texto || msg.Texto || "";
+                        
+                        let textoComentario = textoCompleto;
+                        let valoracion = 0;
+
+                        // --- DESCAMUFLAR EL VOTO ---
+                        if (textoCompleto.startsWith('[')) {
+                            const finBrackets = textoCompleto.indexOf(']');
+                            if (finBrackets > 0) {
+                                valoracion = parseInt(textoCompleto.substring(1, finBrackets)) || 0;
+                                textoComentario = textoCompleto.substring(finBrackets + 1).trim();
+                            }
+                        }
+
+                        // Añadimos las estrellitas visuales en el chat
+                        let mensajeVisual = textoComentario;
+                        if (valoracion > 0) {
+                            const estrellasTexto = '★'.repeat(valoracion) + '☆'.repeat(5 - valoracion);
+                            mensajeVisual = `${textoComentario} <br><span class="text-orange-400 text-xs mt-1 block">${estrellasTexto}</span>`;
+                        }
                         
                         const esMio = nombreAutor === currentUser;
-                        chatMessages.innerHTML += pintarMensaje(nombreAutor, textoComentario, esMio);
+                        chatMessages.innerHTML += pintarMensaje(nombreAutor, mensajeVisual, esMio);
                     });
                 } else {
                     chatMessages.innerHTML = '<p class="text-xs text-center text-gray-400 py-4">No hay comentarios aún. ¡Sé el primero!</p>';
@@ -840,7 +873,32 @@ try {
         });
     }
 
-    // ENVIAR CHAT A AWS
+    // --- LÓGICA DE LAS ESTRELLAS INTERACTIVAS ---
+    const stars = document.querySelectorAll('#interactiveStars span');
+    let estrellasSeleccionadas = 5; 
+
+    stars.forEach((star, index) => {
+        star.addEventListener('click', () => {
+            if (!isLogged) {
+                showAuthModal(); 
+                return;
+            }
+            
+            estrellasSeleccionadas = index + 1; 
+            
+            stars.forEach((s, i) => {
+                if(i <= index) {
+                    s.classList.remove('text-gray-300');
+                    s.classList.add('text-orange-400');
+                } else {
+                    s.classList.add('text-gray-300');
+                    s.classList.remove('text-orange-400');
+                }
+            });
+        });
+    });
+
+    // --- ENVIAR CHAT Y CALCULAR LA MEDIA ---
     const chatForm = document.getElementById('chatForm');
     const chatInput = document.getElementById('chatInput');
 
@@ -871,6 +929,9 @@ try {
             botonEnvio.disabled = true;
             botonEnvio.classList.add('opacity-50');
 
+            // --- 1. ENVIAR EL COMENTARIO CON EL VOTO CAMUFLADO ---
+            const textoCamuflado = `[${estrellasSeleccionadas}] ${text}`;
+
             try {
                 const res = await fetch('/aws/api/comentarios', {
                     method: 'POST',
@@ -880,7 +941,7 @@ try {
                     },
                     body: JSON.stringify({
                         data: {
-                            Texto: text,
+                            Texto: textoCamuflado,
                             NombreUsuario: user.username,
                             historia: currentHistoriaId
                         }
@@ -892,14 +953,67 @@ try {
                         chatMessages.innerHTML = '';
                     }
                     
-                    chatMessages.insertAdjacentHTML('beforeend', pintarMensaje(user.username, text, true));
+                    const estrellasTexto = '★'.repeat(estrellasSeleccionadas) + '☆'.repeat(5 - estrellasSeleccionadas);
+                    const mensajeVisual = `${text} <br><span class="text-orange-400 text-xs mt-1 block">${estrellasTexto}</span>`;
+
+                    chatMessages.insertAdjacentHTML('beforeend', pintarMensaje(user.username, mensajeVisual, true));
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                     chatInput.value = '';
+
+                    // --- 2. EL CALCULO MATEMÁTICO DE LA MEDIA ---
+                    const resComentarios = await fetch(`/aws/api/comentarios?filters[historia][id][$eq]=${currentHistoriaId}`);
+                    const jsonComentarios = await resComentarios.json();
+                    
+                    let sumaVotos = 0;
+                    let totalVotos = 0;
+                    
+                    if (jsonComentarios.data) {
+                        jsonComentarios.data.forEach(c => {
+                            const txt = c.attributes?.Texto || c.Texto || "";
+                            if (txt.startsWith('[')) {
+                                const fin = txt.indexOf(']');
+                                const voto = parseInt(txt.substring(1, fin));
+                                if (voto > 0) {
+                                    sumaVotos += voto;
+                                    totalVotos++;
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Calculamos la nota media con 1 decimal (ej: 4.3)
+                    const nuevaMedia = totalVotos > 0 ? (sumaVotos / totalVotos).toFixed(1) : "0.0";
+                    
+                    // --- 3. ACTUALIZAR EL RATING EN LA COLECCIÓN DE HISTORIAS DE STRAPI ---
+                    await fetch(`/aws/api/historias/${currentHistoriaId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            data: {
+                                Rating: nuevaMedia // Sobrescribimos el rating existente con el nuevo promedio
+                            }
+                        })
+                    });
+
+                    // Actualizamos la nota visual del modal al instante
+                    mRating.textContent = nuevaMedia;
+                    
+                    // Actualizamos el atributo de la tarjeta del catálogo para que el filtro de barra responda en vivo
+                    const tarjetaCatalogo = document.querySelector(`.story-card[data-id="${currentHistoriaId}"]`);
+                    if (tarjetaCatalogo) {
+                        tarjetaCatalogo.setAttribute('data-rating', nuevaMedia);
+                        const labelRatingTarjeta = tarjetaCatalogo.querySelector('.font-bold.text-gray-700');
+                        if (labelRatingTarjeta) labelRatingTarjeta.textContent = nuevaMedia;
+                    }
+
                 } else {
                     console.error("Strapi rechazó el mensaje.");
                 }
             } catch (error) {
-                console.error("Error de red enviando mensaje:", error);
+                console.error("Error de red procesando la valoración:", error);
             } finally {
                 botonEnvio.disabled = false;
                 botonEnvio.classList.remove('opacity-50');
