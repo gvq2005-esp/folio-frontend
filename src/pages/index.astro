@@ -40,6 +40,19 @@ try {
 } catch (error) {
     console.error("Error cargando géneros:", error);
 }
+
+// --- NUEVA PETICIÓN: CONTAR USUARIOS (LECTORES) ---
+let numLectores = 0;
+try {
+    const usersResponse = await fetch("http://51.21.220.203/api/users");
+    if (usersResponse.ok) {
+        const usersJson = await usersResponse.json();
+        // La API de usuarios de Strapi devuelve un array directo, no usa ".data"
+        numLectores = usersJson.length || 0; 
+    }
+} catch (error) {
+    console.error("Error cargando usuarios:", error);
+}
 ---
 
 <html lang="es" class="scroll-smooth">
@@ -213,46 +226,29 @@ try {
                     </div>
                 </div>
 
-                <div
-                    class="w-full max-w-7xl mx-auto px-6 mt-auto relative z-10"
-                >
-                    <div
-                        class="grid grid-cols-1 md:grid-cols-3 gap-8 py-10 border-t border-gray-200 text-center"
-                    >
-                        <div class="flex flex-col items-center">
-                            <span
-                                class="text-4xl font-extrabold tracking-tighter text-orange-500 mb-1"
-                                >2M+</span
-                            >
-                            <span
-                                class="text-sm font-semibold text-gray-500 uppercase tracking-widest"
-                                >Historias</span
-                            >
-                        </div>
+                <div class="w-full max-w-7xl mx-auto px-6 mt-auto relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-10 border-t border-gray-200 text-center max-w-2xl mx-auto">
+        
+        <div class="flex flex-col items-center">
+            <span class="text-5xl font-extrabold tracking-tighter text-orange-500 mb-1">
+                {historias.length}
+            </span>
+            <span class="text-sm font-semibold text-gray-500 uppercase tracking-widest">
+                Historias
+            </span>
+        </div>
 
-                        <div class="flex flex-col items-center">
-                            <span
-                                class="text-4xl font-extrabold tracking-tighter text-orange-500 mb-1"
-                                >800K+</span
-                            >
-                            <span
-                                class="text-sm font-semibold text-gray-500 uppercase tracking-widest"
-                                >Autores</span
-                            >
-                        </div>
-
-                        <div class="flex flex-col items-center">
-                            <span
-                                class="text-4xl font-extrabold tracking-tighter text-orange-500 mb-1"
-                                >50M+</span
-                            >
-                            <span
-                                class="text-sm font-semibold text-gray-500 uppercase tracking-widest"
-                                >Lectores</span
-                            >
-                        </div>
-                    </div>
-                </div>
+        <div class="flex flex-col items-center">
+            <span class="text-5xl font-extrabold tracking-tighter text-orange-500 mb-1">
+                {numLectores}
+            </span>
+            <span class="text-sm font-semibold text-gray-500 uppercase tracking-widest">
+                Lectores
+            </span>
+        </div>
+        
+    </div>
+</div>
             </section>
 
             <section
