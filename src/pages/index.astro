@@ -158,7 +158,7 @@ try {
                                 id="grid"
                                 width="40"
                                 height="40"
-                                patternUnits="userSpaceOnValid"
+                                patternUnits="userSpaceOnUse"
                             >
                                 <path
                                     d="M 40 0 L 0 0 0 40"
@@ -227,28 +227,28 @@ try {
                 </div>
 
                 <div class="w-full max-w-7xl mx-auto px-6 mt-auto relative z-10">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-10 border-t border-gray-200 text-center max-w-2xl mx-auto">
-        
-        <div class="flex flex-col items-center">
-            <span class="text-5xl font-extrabold tracking-tighter text-orange-500 mb-1">
-                {historias.length}
-            </span>
-            <span class="text-sm font-semibold text-gray-500 uppercase tracking-widest">
-                Historias
-            </span>
-        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-10 border-t border-gray-200 text-center max-w-2xl mx-auto">
+                        
+                        <div class="flex flex-col items-center">
+                            <span class="text-5xl font-extrabold tracking-tighter text-orange-500 mb-1">
+                                {historias.length}
+                            </span>
+                            <span class="text-sm font-semibold text-gray-500 uppercase tracking-widest">
+                                Historias
+                            </span>
+                        </div>
 
-        <div class="flex flex-col items-center">
-            <span class="text-5xl font-extrabold tracking-tighter text-orange-500 mb-1">
-                {numLectores}
-            </span>
-            <span class="text-sm font-semibold text-gray-500 uppercase tracking-widest">
-                Lectores
-            </span>
-        </div>
-        
-    </div>
-</div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-5xl font-extrabold tracking-tighter text-orange-500 mb-1">
+                                {numLectores}
+                            </span>
+                            <span class="text-sm font-semibold text-gray-500 uppercase tracking-widest">
+                                Lectores
+                            </span>
+                        </div>
+                        
+                    </div>
+                </div>
             </section>
 
             <section
@@ -481,8 +481,9 @@ try {
                                 }
                             </div>
 
-                            <div class="mt-12 flex justify-center">
+                            <div id="loadMoreContainer" class="mt-12 justify-center hidden">
                                 <button
+                                    id="loadMoreBtn"
                                     class="flex items-center gap-2 border border-gray-300 bg-white text-gray-700 px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-50 transition shadow-sm"
                                 >
                                     <svg
@@ -827,154 +828,154 @@ try {
                                     viewBox="0 0 24 24"
                                     ><path
                                         d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"
-                                    ></path></svg
-                                >
-                            </a>
-                        </div>
-                    </div>
+                                    ></path></svg
+                                >
+                            </a>
+                        </div>
+                    </div>
 
-                    <div>
-                        <h3
-                            class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-5"
-                        >
-                            Plataforma
-                        </h3>
-                        <ul class="space-y-3.5 text-sm text-gray-500">
-                            <li>
-                                <a
-                                    href="/#catalogo"
-                                    class="hover:text-orange-500 transition"
-                                    >Explorar Historias</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="/upload"
-                                    class="hover:text-orange-500 transition"
-                                    >Subir Historia</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Listas de Lectura</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Retos</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Tendencias</a
-                                >
-                            </li>
-                        </ul>
-                    </div>
+                    <div>
+                        <h3
+                            class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-5"
+                        >
+                            Plataforma
+                        </h3>
+                        <ul class="space-y-3.5 text-sm text-gray-500">
+                            <li>
+                                <a
+                                    href="/#catalogo"
+                                    class="hover:text-orange-500 transition"
+                                    >Explorar Historias</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="/upload"
+                                    class="hover:text-orange-500 transition"
+                                    >Subir Historia</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Listas de Lectura</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Retos</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Tendencias</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
 
-                    <div>
-                        <h3
-                            class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-5"
-                        >
-                            Compañía
-                        </h3>
-                        <ul class="space-y-3.5 text-sm text-gray-500">
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Sobre Folio</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="/blog"
-                                    class="hover:text-orange-500 transition"
-                                    >Blog</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Empleo</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Prensa</a
-                                >
-                            </li>
-                        </ul>
-                    </div>
+                    <div>
+                        <h3
+                            class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-5"
+                        >
+                            Compañía
+                        </h3>
+                        <ul class="space-y-3.5 text-sm text-gray-500">
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Sobre Folio</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="/blog"
+                                    class="hover:text-orange-500 transition"
+                                    >Blog</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Empleo</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Prensa</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
 
-                    <div>
-                        <h3
-                            class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-5"
-                        >
-                            Soporte
-                        </h3>
-                        <ul class="space-y-3.5 text-sm text-gray-500">
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Centro de Ayuda</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Comunidad</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Normas</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Privacidad</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    class="hover:text-orange-500 transition"
-                                    >Términos</a
-                                >
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                    <div>
+                        <h3
+                            class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-5"
+                        >
+                            Soporte
+                        </h3>
+                        <ul class="space-y-3.5 text-sm text-gray-500">
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Centro de Ayuda</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Comunidad</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Normas</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Privacidad</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="hover:text-orange-500 transition"
+                                    >Términos</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-                <div
-                    class="border-t border-gray-100 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400"
-                >
-                    <p>© 2026 Folio. Todos los derechos reservados.</p>
-                    <p class="flex items-center gap-1">
-                        Hecho con <span
-                            class="text-red-400 text-lg leading-none">♥</span
-                        > para lectores
-                    </p>
-                </div>
-            </div>
-        </footer>
-    </body>
+                <div
+                    class="border-t border-gray-100 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400"
+                >
+                    <p>© 2026 Folio. Todos los derechos reservados.</p>
+                    <p class="flex items-center gap-1">
+                        Hecho con <span
+                            class="text-red-400 text-lg leading-none">♥</span
+                        > para lectores
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </body>
 </html>
 
 <script>
@@ -1047,14 +1048,20 @@ try {
             });
         });
 
-        // --- 3. LÓGICA DE FILTROS Y BUSCADOR ---
+        // --- 3. LÓGICA DE FILTROS, BUSCADOR Y PAGINACIÓN ---
         const filterBtns = document.querySelectorAll(".filter-btn");
         const storyCards = document.querySelectorAll(".story-card");
         const storyCounter = document.getElementById("story-counter");
         const searchInput = document.getElementById("searchInput");
+        const loadMoreContainer = document.getElementById("loadMoreContainer");
+        const loadMoreBtn = document.getElementById("loadMoreBtn");
 
         let generoActivo = "all";
         let busquedaActiva = "";
+        
+        // CONFIGURACIÓN DE PAGINACIÓN
+        const CARDS_PER_PAGE = 6;
+        let currentPage = 1;
 
         const updateCounter = (count) => {
             if (storyCounter) {
@@ -1062,10 +1069,11 @@ try {
             }
         };
 
-        updateCounter(storyCards.length);
+        const aplicarFiltrosYBusqueda = (resetPage = true) => {
+            if (resetPage) currentPage = 1; 
 
-        const aplicarFiltrosYBusqueda = () => {
-            let visibleCount = 0;
+            let matchCount = 0;   
+            let visibleCount = 0; 
 
             storyCards.forEach((card) => {
                 const cardGenero = card.getAttribute("data-genero");
@@ -1076,20 +1084,45 @@ try {
                 const coincideBusqueda = cardTitulo.includes(busquedaActiva) || cardAutor.includes(busquedaActiva);
 
                 if (coincideGenero && coincideBusqueda) {
-                    card.style.display = "";
-                    visibleCount++;
+                    matchCount++;
+                    if (visibleCount < currentPage * CARDS_PER_PAGE) {
+                        card.style.display = "";
+                        visibleCount++;
+                    } else {
+                        card.style.display = "none";
+                    }
                 } else {
                     card.style.display = "none";
                 }
             });
 
-            updateCounter(visibleCount);
+            updateCounter(matchCount);
+
+            if (loadMoreContainer) {
+                if (matchCount > visibleCount) {
+                    loadMoreContainer.classList.remove("hidden");
+                    loadMoreContainer.classList.add("flex");
+                } else {
+                    loadMoreContainer.classList.add("hidden");
+                    loadMoreContainer.classList.remove("flex");
+                }
+            }
         };
+
+        // Inicializamos la primera vez que carga la web
+        aplicarFiltrosYBusqueda(true);
+
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener("click", () => {
+                currentPage++; 
+                aplicarFiltrosYBusqueda(false); 
+            });
+        }
 
         if (searchInput) {
             searchInput.addEventListener("input", (e) => {
                 busquedaActiva = e.target.value.toLowerCase().trim();
-                aplicarFiltrosYBusqueda();
+                aplicarFiltrosYBusqueda(true);
             });
         }
 
@@ -1102,7 +1135,7 @@ try {
                 });
                 btn.classList.remove("bg-gray-100", "text-gray-700");
                 btn.classList.add("bg-gray-900", "text-white");
-                aplicarFiltrosYBusqueda();
+                aplicarFiltrosYBusqueda(true);
             });
         });
 
@@ -1121,8 +1154,8 @@ try {
 
         const chatMessages = document.getElementById("chatMessages");
         
-        let currentHistoriaId = null; // Para los comentarios
-        let currentHistoriaDocId = null; // Para borrarla
+        let currentHistoriaId = null;
+        let currentHistoriaDocId = null;
 
         const pintarMensaje = (nombre, texto, esPropio) => {
             const inicial = nombre.charAt(0).toUpperCase();
@@ -1143,7 +1176,7 @@ try {
         storyCards.forEach((card) => {
             card.addEventListener("click", async () => {
                 currentHistoriaId = card.getAttribute("data-id");
-                currentHistoriaDocId = card.getAttribute("data-docid"); // Cazamos el ID letal
+                currentHistoriaDocId = card.getAttribute("data-docid");
 
                 const titulo = card.getAttribute("data-titulo");
                 const autor = card.getAttribute("data-autor");
@@ -1288,7 +1321,6 @@ try {
                     mDeleteBtn.classList.add("opacity-50", "pointer-events-none");
 
                     try {
-                        // ¡Aquí usamos el ID letal (documentId)!
                         const res = await fetch(`/aws/api/historias/${currentHistoriaDocId}`, {
                             method: "DELETE",
                             headers: {
@@ -1300,17 +1332,14 @@ try {
                             alert("¡Historia eliminada correctamente de la base de datos!");
                             closeModal();
                             
-                            // Borramos la tarjeta usando el ID letal
                             const tarjetaFantasma = document.querySelector(`.story-card[data-docid="${currentHistoriaDocId}"]`);
                             if (tarjetaFantasma) tarjetaFantasma.remove();
                             
-                            // Actualizamos el contador visual
                             const tarjetasRestantes = document.querySelectorAll('.story-card').length;
                             const storyCounter = document.getElementById("story-counter");
                             if (storyCounter) {
                                 storyCounter.textContent = `${tarjetasRestantes} historia${tarjetasRestantes !== 1 ? "s" : ""} encontrada${tarjetasRestantes !== 1 ? "s" : ""}`;
                             }
-
                         } else {
                             const errorStrapi = await res.json();
                             alert(`Strapi dice: "${errorStrapi.error?.message || 'Error desconocido'}"`);
@@ -1326,7 +1355,7 @@ try {
             });
         }
 
-        // --- ENVIAR CHAT A AWS ---
+        // --- 7. ENVIAR CHAT A AWS ---
         const chatForm = document.getElementById("chatForm");
         const chatInput = document.getElementById("chatInput");
 
