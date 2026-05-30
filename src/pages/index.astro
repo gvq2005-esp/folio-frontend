@@ -481,10 +481,11 @@ try {
                                 }
                             </div>
 
-                            <div class="mt-12 flex justify-center">
-                                <button
-                                    class="flex items-center gap-2 border border-gray-300 bg-white text-gray-700 px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-50 transition shadow-sm"
-                                >
+                            <div id="loadMoreContainer" class="mt-12 justify-center hidden">
+    <button
+        id="loadMoreBtn"
+        class="flex items-center gap-2 border border-gray-300 bg-white text-gray-700 px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-50 transition shadow-sm"
+    >
                                     <svg
                                         class="w-4 h-4"
                                         fill="none"
@@ -1047,14 +1048,20 @@ try {
             });
         });
 
-        // --- 3. LÓGICA DE FILTROS Y BUSCADOR ---
+        // --- 3. LÓGICA DE FILTROS, BUSCADOR Y PAGINACIÓN ---
         const filterBtns = document.querySelectorAll(".filter-btn");
         const storyCards = document.querySelectorAll(".story-card");
         const storyCounter = document.getElementById("story-counter");
         const searchInput = document.getElementById("searchInput");
+        const loadMoreContainer = document.getElementById("loadMoreContainer");
+        const loadMoreBtn = document.getElementById("loadMoreBtn");
 
         let generoActivo = "all";
         let busquedaActiva = "";
+        
+        // CONFIGURACIÓN DE PAGINACIÓN
+        const CARDS_PER_PAGE = 6;
+        let currentPage = 1;
 
         const updateCounter = (count) => {
             if (storyCounter) {
@@ -1062,10 +1069,12 @@ try {
             }
         };
 
-        updateCounter(storyCards.length);
+        // El parámetro resetPage nos sirve para volver al principio si el usuario escribe o toca un filtro
+        const aplicarFiltrosYBusqueda = (resetPage = true) => {
+            if (resetPage) currentPage = 1; 
 
-        const aplicarFiltrosYBusqueda = () => {
-            let visibleCount = 0;
+            let matchCount = 0;   // Contador de historias totales que cumplen el filtro
+            let visibleCount = 0; // Contador de historias que realmente pintamos en pantalla
 
             storyCards.forEach((card) => {
                 const cardGenero = card.getAttribute("data-genero");
@@ -1076,20 +1085,50 @@ try {
                 const coincideBusqueda = cardTitulo.includes(busquedaActiva) || cardAutor.includes(busquedaActiva);
 
                 if (coincideGenero && coincideBusqueda) {
-                    card.style.display = "";
-                    visibleCount++;
+                    matchCount++;
+                    // Si no hemos llegado al límite de la página actual, la enseñamos
+                    if (visibleCount < currentPage * CARDS_PER_PAGE) {
+                        card.style.display = "";
+                        visibleCount++;
+                    } else {
+                        card.style.display = "none"; // Ocultamos las que sobran
+                    }
                 } else {
-                    card.style.display = "none";
+                    card.style.display = "none"; // Ocultamos las que no cumplen filtros
                 }
             });
 
-            updateCounter(visibleCount);
+            // Actualizamos el texto. Ej: "12 historias encontradas" (aunque solo se vean 6)
+            updateCounter(matchCount);
+
+            // ¿Mostramos u ocultamos el botón de Cargar Más?
+            if (loadMoreContainer) {
+                if (matchCount > visibleCount) {
+                    loadMoreContainer.classList.remove("hidden");
+                    loadMoreContainer.classList.add("flex");
+                } else {
+                    loadMoreContainer.classList.add("hidden");
+                    loadMoreContainer.classList.remove("flex");
+                }
+            }
         };
 
+        // Inicializamos la primera vez que carga la web
+        aplicarFiltrosYBusqueda();
+
+        // Acción del botón Cargar Más
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener("click", () => {
+                currentPage++; 
+                aplicarFiltrosYBusqueda(false); // False para que NO vuelva a la página 1
+            });
+        }
+
+        // --- Eventos de los filtros (le pasamos true para resetear la paginación) ---
         if (searchInput) {
             searchInput.addEventListener("input", (e) => {
                 busquedaActiva = e.target.value.toLowerCase().trim();
-                aplicarFiltrosYBusqueda();
+                aplicarFiltrosYBusqueda(true);
             });
         }
 
@@ -1102,7 +1141,7 @@ try {
                 });
                 btn.classList.remove("bg-gray-100", "text-gray-700");
                 btn.classList.add("bg-gray-900", "text-white");
-                aplicarFiltrosYBusqueda();
+                aplicarFiltrosYBusqueda(true);
             });
         });
 
