@@ -1275,7 +1275,7 @@ try {
             mDeleteBtn.addEventListener("click", async () => {
                 if (!isLogged) return;
                 
-                const confirmacion = confirm("⚠️ ¿Estás seguro de que quieres borrar esta historia para siempre?");
+                const confirmacion = confirm("⚠️ ¿Estás seguro de que quieres borrar esta historia para siempre? Esta acción no se puede deshacer.");
                 
                 if (confirmacion) {
                     const originalText = mDeleteBtn.innerHTML;
@@ -1283,8 +1283,6 @@ try {
                     mDeleteBtn.classList.add("opacity-50", "pointer-events-none");
 
                     try {
-                        console.log(`Intentando borrar la historia con ID: ${currentHistoriaId}`);
-                        
                         const res = await fetch(`/aws/api/historias/${currentHistoriaId}`, {
                             method: "DELETE",
                             headers: {
@@ -1292,26 +1290,23 @@ try {
                             }
                         });
 
-                        // ¡AQUÍ ESTÁ LA TRAMPA! Vamos a leer qué devuelve el túnel de Vercel exactamente
-                        const respuestaReal = await res.json();
-                        console.log("Respuesta real del servidor:", respuestaReal);
+                        // Leemos la respuesta como TEXTO puro para que no explote si no es JSON
+                        const textoRespuesta = await res.text();
+                        console.log("Código HTTP de la respuesta:", res.status);
+                        console.log("Cuerpo de la respuesta:", textoRespuesta);
 
                         if (res.ok) {
-                            // Si respuestaReal.data es un ARRAY, significa que Vercel lo transformó en un GET
-                            if (Array.isArray(respuestaReal.data)) {
-                                alert("¡CAZADO! Vercel ha transformado el DELETE en un GET. Mira la consola F12.");
-                            } else {
-                                alert("Historia eliminada. Borrado confirmado por Strapi.");
-                                closeModal();
-                                const tarjetaFantasma = document.querySelector(`.story-card[data-id="${currentHistoriaId}"]`);
-                                if (tarjetaFantasma) tarjetaFantasma.remove();
-                            }
+                            alert("¡Ahora sí! Historia eliminada correctamente.");
+                            closeModal();
+                            const tarjetaFantasma = document.querySelector(`.story-card[data-id="${currentHistoriaId}"]`);
+                            if (tarjetaFantasma) tarjetaFantasma.remove();
                         } else {
-                            alert(`Error de Strapi: ${respuestaReal.error?.message}`);
+                            // Imprimimos el código de error para saber quién nos bloquea
+                            alert(`Fallo en el borrado. El servidor ha devuelto un código HTTP ${res.status}. Revisa la consola (F12) para leer el mensaje completo.`);
                         }
                     } catch (error) {
-                        console.error("Error al borrar:", error);
-                        alert("Error crítico de red.");
+                        console.error("Error al intentar conectar:", error);
+                        alert("El navegador no ha podido conectar con el servidor.");
                     } finally {
                         mDeleteBtn.innerHTML = originalText;
                         mDeleteBtn.classList.remove("opacity-50", "pointer-events-none");
