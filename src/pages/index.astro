@@ -1114,7 +1114,7 @@ try {
         const mAuthor = document.getElementById("modalAuthor");
         const mSynopsis = document.getElementById("modalSynopsis");
         const mReadBtn = document.getElementById("modalReadBtn");
-        const mDeleteBtn = document.getElementById("modalDeleteBtn"); // <-- Selector de borrar
+        const mDeleteBtn = document.getElementById("modalDeleteBtn"); 
 
         const chatMessages = document.getElementById("chatMessages");
         let currentHistoriaId = null;
@@ -1169,7 +1169,6 @@ try {
                 if (mDeleteBtn) {
                     if (isLogged) {
                         const currentUser = JSON.parse(userString).username;
-                        // Si el usuario actual es el autor exacto de la historia
                         if (currentUser === autor) {
                             mDeleteBtn.classList.remove("hidden");
                         } else {
@@ -1294,9 +1293,25 @@ try {
 
                         if (res.ok) {
                             alert("Historia eliminada correctamente.");
-                            window.location.reload(); 
+                            
+                            // 1. Cerramos el modal
+                            closeModal();
+
+                            // 2. Destruimos la tarjeta visualmente para que desaparezca al instante (Solución al Efecto Fantasma)
+                            const tarjetaFantasma = document.querySelector(`.story-card[data-id="${currentHistoriaId}"]`);
+                            if (tarjetaFantasma) {
+                                tarjetaFantasma.remove();
+                            }
+
+                            // 3. Actualizamos el contador de historias que sale arriba en los filtros
+                            const tarjetasRestantes = document.querySelectorAll('.story-card').length;
+                            const storyCounter = document.getElementById("story-counter");
+                            if (storyCounter) {
+                                storyCounter.textContent = `${tarjetasRestantes} historia${tarjetasRestantes !== 1 ? "s" : ""} encontrada${tarjetasRestantes !== 1 ? "s" : ""}`;
+                            }
+
                         } else {
-                            // Extraemos el error exacto de Strapi
+                            // Extraemos el error exacto de Strapi si algo falla
                             const errorStrapi = await res.json();
                             console.error("Error completo de Strapi:", errorStrapi);
                             alert(`Strapi dice: "${errorStrapi.error?.message || 'Error desconocido'}" (Código: ${res.status})`);
