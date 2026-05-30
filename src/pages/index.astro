@@ -1294,10 +1294,12 @@ try {
 
                         if (res.ok) {
                             alert("Historia eliminada correctamente.");
-                            window.location.reload(); // Recarga la página para refrescar el catálogo estático
+                            window.location.reload(); 
                         } else {
-                            console.error("Strapi rechazó el borrado.");
-                            alert("No se pudo eliminar la historia. Revisa los permisos en Strapi.");
+                            // Extraemos el error exacto de Strapi
+                            const errorStrapi = await res.json();
+                            console.error("Error completo de Strapi:", errorStrapi);
+                            alert(`Strapi dice: "${errorStrapi.error?.message || 'Error desconocido'}" (Código: ${res.status})`);
                         }
                     } catch (error) {
                         console.error("Error al borrar:", error);
