@@ -403,10 +403,13 @@ try {
                                                 ? `/aws${pdfRelativa}`
                                                 : "#";
 
+                                            const docId = historia.documentId || historia.id;
+
                                             return (
                                                 <article
                                                     class="story-card bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow group cursor-pointer flex flex-col h-full"
                                                     data-id={historia.id}
+                                                    data-docid={docId}
                                                     data-titulo={titulo}
                                                     data-autor={autor}
                                                     data-sinopsis={sinopsis}
@@ -1117,7 +1120,9 @@ try {
         const mDeleteBtn = document.getElementById("modalDeleteBtn"); 
 
         const chatMessages = document.getElementById("chatMessages");
-        let currentHistoriaId = null;
+        
+        let currentHistoriaId = null; // Para los comentarios
+        let currentHistoriaDocId = null; // Para borrarla
 
         const pintarMensaje = (nombre, texto, esPropio) => {
             const inicial = nombre.charAt(0).toUpperCase();
@@ -1138,6 +1143,7 @@ try {
         storyCards.forEach((card) => {
             card.addEventListener("click", async () => {
                 currentHistoriaId = card.getAttribute("data-id");
+                currentHistoriaDocId = card.getAttribute("data-docid"); // Cazamos el ID letal
 
                 const titulo = card.getAttribute("data-titulo");
                 const autor = card.getAttribute("data-autor");
@@ -1165,7 +1171,6 @@ try {
                     }
                 }
 
-                // --- MOSTRAR U OCULTAR EL BOTÓN DE BORRAR ---
                 if (mDeleteBtn) {
                     if (isLogged) {
                         const currentUser = JSON.parse(userString).username;
@@ -1283,30 +1288,36 @@ try {
                     mDeleteBtn.classList.add("opacity-50", "pointer-events-none");
 
                     try {
-                        const res = await fetch(`/aws/api/historias/${currentHistoriaId}`, {
+                        // ¡Aquí usamos el ID letal (documentId)!
+                        const res = await fetch(`/aws/api/historias/${currentHistoriaDocId}`, {
                             method: "DELETE",
                             headers: {
                                 "Authorization": `Bearer ${token}`
                             }
                         });
 
-                        // Leemos la respuesta como TEXTO puro para que no explote si no es JSON
-                        const textoRespuesta = await res.text();
-                        console.log("Código HTTP de la respuesta:", res.status);
-                        console.log("Cuerpo de la respuesta:", textoRespuesta);
-
                         if (res.ok) {
-                            alert("¡Ahora sí! Historia eliminada correctamente.");
+                            alert("¡Historia eliminada correctamente de la base de datos!");
                             closeModal();
-                            const tarjetaFantasma = document.querySelector(`.story-card[data-id="${currentHistoriaId}"]`);
+                            
+                            // Borramos la tarjeta usando el ID letal
+                            const tarjetaFantasma = document.querySelector(`.story-card[data-docid="${currentHistoriaDocId}"]`);
                             if (tarjetaFantasma) tarjetaFantasma.remove();
+                            
+                            // Actualizamos el contador visual
+                            const tarjetasRestantes = document.querySelectorAll('.story-card').length;
+                            const storyCounter = document.getElementById("story-counter");
+                            if (storyCounter) {
+                                storyCounter.textContent = `${tarjetasRestantes} historia${tarjetasRestantes !== 1 ? "s" : ""} encontrada${tarjetasRestantes !== 1 ? "s" : ""}`;
+                            }
+
                         } else {
-                            // Imprimimos el código de error para saber quién nos bloquea
-                            alert(`Fallo en el borrado. El servidor ha devuelto un código HTTP ${res.status}. Revisa la consola (F12) para leer el mensaje completo.`);
+                            const errorStrapi = await res.json();
+                            alert(`Strapi dice: "${errorStrapi.error?.message || 'Error desconocido'}"`);
                         }
                     } catch (error) {
-                        console.error("Error al intentar conectar:", error);
-                        alert("El navegador no ha podido conectar con el servidor.");
+                        console.error("Error al borrar:", error);
+                        alert("Error de red al intentar borrar la historia.");
                     } finally {
                         mDeleteBtn.innerHTML = originalText;
                         mDeleteBtn.classList.remove("opacity-50", "pointer-events-none");
